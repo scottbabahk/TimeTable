@@ -236,8 +236,8 @@
                         ✨ <b>Drag</b> any sticker directly to a schedule slot, OR <b>Tap</b> a sticker below and then <b>Tap</b> your desired time slot!
                     </p>
 
-                    <!-- Sticker Grid -->
-                    <div class="grid grid-cols-3 gap-3" id="stickers-container">
+                    <!-- Sticker Grid (Changed to 2 columns as requested) -->
+                    <div class="grid grid-cols-2 gap-3" id="stickers-container">
                         <!-- JS Injecting 10 Stickers (001 - 010) -->
                     </div>
 
@@ -314,178 +314,18 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Predefined Default High-Quality SVGs for stickers 001 - 010
+        // Default definition referencing images 001 - 010 with cute fallbacks
         const defaultStickers = {
-            "001": {
-                name: "001 Magic Book",
-                emoji: "📚",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <rect x="12" y="16" width="40" height="34" rx="4" fill="#a582e2" stroke="#794fca" stroke-width="2"/>
-                        <path d="M12 46 C16 46, 20 48, 32 48 C44 48, 48 46, 52 46 C52 48, 44 52, 32 52 C20 52, 16 48, 12 46 Z" fill="#ffe5ec" stroke="#794fca" stroke-width="2"/>
-                        <path d="M16 20 L16 42 C20 42, 28 44, 32 44 L32 20 C28 20, 20 20, 16 20 Z" fill="#ffffff" />
-                        <path d="M48 20 L48 42 C44 42, 36 44, 32 44 L32 20 C36 20, 44 20, 48 20 Z" fill="#ffffff" />
-                        <circle cx="32" cy="16" r="3" fill="#ffe66d"/>
-                        <polygon points="32,24 35,31 42,31 36,35 38,42 32,38 26,42 28,35 22,31 29,31" fill="#ffe66d" />
-                      </svg>`
-            },
-            "002": {
-                name: "002 Star Wand",
-                emoji: "🪄",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <rect x="29" y="24" width="6" height="32" rx="3" fill="#cf71a9" />
-                        <line x1="32" y1="24" x2="32" y2="56" stroke="#b24385" stroke-width="2" stroke-linecap="round"/>
-                        <polygon points="32,6 36,15 46,15 38,21 41,30 32,25 23,30 26,21 18,15 28,15" fill="#ffd166" stroke="#e9c46a" stroke-width="2" />
-                        <circle cx="32" cy="18" r="1.5" fill="#ffffff" />
-                        <circle cx="20" cy="35" r="2" fill="#a582e2" />
-                        <circle cx="44" cy="22" r="1.5" fill="#a582e2" />
-                      </svg>`
-            },
-            "003": {
-                name: "003 Sweet Cupcake",
-                emoji: "🧁",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <!-- Cup Wrapper -->
-                        <polygon points="16,36 48,36 42,56 22,56" fill="#70d6ff" stroke="#48cae4" stroke-width="2" stroke-linejoin="round" />
-                        <line x1="26" y1="36" x2="28" y2="56" stroke="#48cae4" stroke-width="1.5" />
-                        <line x1="32" y1="36" x2="32" y2="56" stroke="#48cae4" stroke-width="1.5" />
-                        <line x1="38" y1="36" x2="36" y2="56" stroke="#48cae4" stroke-width="1.5" />
-                        <!-- Cake frosting -->
-                        <path d="M12 36 Q 16 22, 32 22 Q 48 22, 52 36 Z" fill="#ffb7c5" />
-                        <path d="M18 30 Q 32 12, 46 30 Z" fill="#ffccd5" />
-                        <!-- Cherry on top -->
-                        <circle cx="32" cy="14" r="5" fill="#ff4d6d" />
-                        <path d="M32 9 Q 36 2, 42 4" stroke="#ff4d6d" stroke-width="1.5" fill="none" />
-                        <!-- Sprinkles -->
-                        <rect x="22" y="26" width="3" height="1.5" rx="0.5" fill="#ffe66d" transform="rotate(20)" />
-                        <rect x="36" y="24" width="3" height="1.5" rx="0.5" fill="#70d6ff" transform="rotate(-15)" />
-                        <rect x="42" y="28" width="3" height="1.5" rx="0.5" fill="#a582e2" transform="rotate(45)" />
-                      </svg>`
-            },
-            "004": {
-                name: "004 Toy Dino",
-                emoji: "🦕",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <path d="M48 26 C 48 18, 42 12, 36 12 C 30 12, 28 16, 26 22 C 24 28, 14 30, 10 34 C 6 38, 8 46, 16 46 C 24 46, 26 44, 30 46 C 34 48, 40 48, 44 44 C 48 40, 48 32, 48 26 Z" fill="#99e2b4" stroke="#67b99a" stroke-width="2"/>
-                        <circle cx="36" cy="18" r="2" fill="#2d3748" />
-                        <circle cx="40" cy="18" r="1" fill="#ffffff" />
-                        <!-- Blush -->
-                        <ellipse cx="36" cy="21" rx="2" ry="1" fill="#ffb7c5" />
-                        <!-- Spikes -->
-                        <polygon points="26,14 28,11 30,14" fill="#ffcbd5" />
-                        <polygon points="31,12 33,9 35,12" fill="#ffcbd5" />
-                        <polygon points="16,46 14,54 18,54" fill="#99e2b4" />
-                        <polygon points="24,46 22,54 26,54" fill="#99e2b4" />
-                        <polygon points="34,46 32,54 36,54" fill="#99e2b4" />
-                      </svg>`
-            },
-            "005": {
-                name: "005 Rainbow Cloud",
-                emoji: "🌈",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <!-- Rainbow backdrop -->
-                        <path d="M 14,42 A 18,18 0 0,1 50,42" fill="none" stroke="#ffb7c5" stroke-width="4"/>
-                        <path d="M 18,42 A 14,14 0 0,1 46,42" fill="none" stroke="#ffd166" stroke-width="4"/>
-                        <path d="M 22,42 A 10,10 0 0,1 42,42" fill="none" stroke="#06d6a0" stroke-width="4"/>
-                        <!-- Cloud overlay -->
-                        <path d="M12 44 Q 10 32, 22 34 Q 32 24, 42 34 Q 52 32, 50 44 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
-                        <circle cx="18" cy="42" r="6" fill="#ffffff" />
-                        <circle cx="44" cy="42" r="6" fill="#ffffff" />
-                        <!-- Sparkles -->
-                        <polygon points="50,15 52,20 57,20 53,23 55,28 50,25 45,28 47,23 43,20 48,20" fill="#ffd166" />
-                      </svg>`
-            },
-            "006": {
-                name: "006 Shiny Star",
-                emoji: "⭐",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <polygon points="32,6 39,21 56,21 42,31 47,48 32,38 17,48 22,31 8,21 25,21" fill="#ffe66d" stroke="#f4d35e" stroke-width="3" stroke-linejoin="round" />
-                        <circle cx="25" cy="27" r="2" fill="#2d3748" />
-                        <circle cx="39" cy="27" r="2" fill="#2d3748" />
-                        <ellipse cx="21" cy="30" rx="3" ry="1.5" fill="#ffb7c5" />
-                        <ellipse cx="43" cy="30" rx="3" ry="1.5" fill="#ffb7c5" />
-                        <path d="M 30,32 Q 32,35 34,32" stroke="#2d3748" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                      </svg>`
-            },
-            "007": {
-                name: "007 Magic Orb",
-                emoji: "🔮",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <ellipse cx="32" cy="52" rx="16" ry="6" fill="#90e0ef" stroke="#0077b6" stroke-width="2" />
-                        <polygon points="20,44 44,44 38,54 26,54" fill="#0077b6" />
-                        <circle cx="32" cy="28" r="20" fill="#a582e2" stroke="#794fca" stroke-width="2" />
-                        <circle cx="32" cy="28" r="20" fill="url(#orb-grad)" opacity="0.8" />
-                        <!-- Sparkles inside -->
-                        <polygon points="26,20 28,24 32,24 29,26 30,30 26,28 22,30 23,26 20,24 24,24" fill="#ffffff" />
-                        <circle cx="42" cy="22" r="3" fill="#ffffff" opacity="0.6" />
-                        <circle cx="38" cy="36" r="1.5" fill="#ffffff" opacity="0.6" />
-                        <defs>
-                          <radialGradient id="orb-grad" cx="30%" cy="30%" r="70%">
-                            <stop offset="0%" stop-color="#ffffff"/>
-                            <stop offset="50%" stop-color="#e8cbf5"/>
-                            <stop offset="100%" stop-color="#794fca"/>
-                          </radialGradient>
-                        </defs>
-                      </svg>`
-            },
-            "008": {
-                name: "008 Lucky Cat",
-                emoji: "🐱",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <circle cx="32" cy="36" r="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
-                        <!-- Ears -->
-                        <polygon points="16,24 20,10 28,21" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
-                        <polygon points="19,21 21,13 26,19" fill="#ffcbd5" />
-                        <polygon points="48,24 44,10 36,21" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
-                        <polygon points="45,21 43,13 38,19" fill="#ffcbd5" />
-                        <!-- Eyes -->
-                        <circle cx="26" cy="32" r="2" fill="#2d3748" />
-                        <circle cx="38" cy="32" r="2" fill="#2d3748" />
-                        <circle cx="25" cy="31" r="0.7" fill="#ffffff" />
-                        <circle cx="37" cy="31" r="0.7" fill="#ffffff" />
-                        <!-- Nose/Mouth -->
-                        <path d="M30 36 Q 32 38, 34 36" stroke="#2d3748" stroke-width="1.5" fill="none" />
-                        <ellipse cx="21" cy="35" rx="3" ry="1.5" fill="#ffb7c5" opacity="0.8" />
-                        <ellipse cx="43" cy="35" rx="3" ry="1.5" fill="#ffb7c5" opacity="0.8" />
-                        <!-- Whiskers -->
-                        <line x1="12" y1="34" x2="18" y2="34" stroke="#cbd5e1" stroke-width="1.5" />
-                        <line x1="12" y1="38" x2="17" y2="37" stroke="#cbd5e1" stroke-width="1.5" />
-                        <line x1="52" y1="34" x2="46" y2="34" stroke="#cbd5e1" stroke-width="1.5" />
-                        <line x1="52" y1="38" x2="47" y2="37" stroke="#cbd5e1" stroke-width="1.5" />
-                      </svg>`
-            },
-            "009": {
-                name: "009 Magic Music",
-                emoji: "🎵",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <!-- Left note head -->
-                        <ellipse cx="22" cy="46" rx="6" ry="4" fill="#a582e2" transform="rotate(-10, 22, 46)" />
-                        <!-- Right note head -->
-                        <ellipse cx="46" cy="40" rx="6" ry="4" fill="#a582e2" transform="rotate(-10, 46, 40)" />
-                        <!-- Stems -->
-                        <rect x="26" y="20" width="3" height="26" fill="#a582e2" />
-                        <rect x="50" y="14" width="3" height="26" fill="#a582e2" />
-                        <!-- Beam -->
-                        <polygon points="26,20 53,14 53,19 26,25" fill="#a582e2" />
-                        <!-- Tiny sparkle stars -->
-                        <polygon points="14,20 16,24 20,24 17,26 18,30 14,28 10,30 11,26 8,24 12,24" fill="#ffd166" />
-                        <polygon points="46,48 48,51 52,51 49,53 50,57 46,55 42,57 43,53 40,51 44,51" fill="#ffe5ec" />
-                      </svg>`
-            },
-            "010": {
-                name: "010 Sleepy Moon",
-                emoji: "🌙",
-                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
-                        <path d="M46 44 C 30 46, 18 34, 20 18 C 11 22, 12 36, 22 42 C 32 48, 42 48, 46 44 Z" fill="#fff3b0" stroke="#f4d35e" stroke-width="2" />
-                        <circle cx="28" cy="32" r="1.5" fill="#2d3748" />
-                        <path d="M26 36 Q 28 38, 30 36" stroke="#2d3748" stroke-width="1" fill="none" />
-                        <!-- Sleep cap -->
-                        <polygon points="20,18 24,12 16,14" fill="#a582e2" />
-                        <circle cx="16" cy="14" r="2" fill="#ffffff" />
-                        <!-- Mini stars around -->
-                        <polygon points="48,16 50,19 54,19 51,21 52,25 48,23 44,25 45,21 42,19 46,19" fill="#e8f0fe" />
-                        <polygon points="36,44 38,46 41,46 39,48 40,51 36,49 32,51 33,48 31,46 34,46" fill="#e8f0fe" />
-                      </svg>`
-            }
+            "001": { name: "Magic Book", emoji: "📚", img: "images/001.png" },
+            "002": { name: "Star Wand", emoji: "🪄", img: "images/002.png" },
+            "003": { name: "Cupcake", emoji: "🧁", img: "images/003.png" },
+            "004": { name: "Toy Dino", emoji: "🦕", img: "images/004.png" },
+            "005": { name: "Rainbow Cloud", emoji: "🌈", img: "images/005.png" },
+            "006": { name: "Shiny Star", emoji: "⭐", img: "images/006.png" },
+            "007": { name: "Magic Orb", emoji: "🔮", img: "images/007.png" },
+            "008": { name: "Lucky Cat", emoji: "🐱", img: "images/008.png" },
+            "009": { name: "Music Notes", emoji: "🎵", img: "images/009.png" },
+            "010": { name: "Sleepy Moon", emoji: "🌙", img: "images/010.png" }
         };
 
         // Slots definitions
@@ -602,25 +442,37 @@
             Object.keys(defaultStickers).sort().forEach(id => {
                 const item = defaultStickers[id];
                 const stickerDiv = document.createElement("div");
-                stickerDiv.className = "bg-white p-2 rounded-xl border border-pink-100 shadow-sm cursor-pointer hover:-translate-y-1 hover:shadow-md hover:border-pink-300 active:scale-95 transition-all duration-200 relative group flex flex-col items-center select-none";
+                stickerDiv.className = "bg-white p-3 rounded-xl border border-pink-100 shadow-sm cursor-pointer hover:-translate-y-1 hover:shadow-md hover:border-pink-300 active:scale-95 transition-all duration-200 relative group flex flex-col items-center select-none";
                 stickerDiv.id = `drawer-sticker-${id}`;
                 stickerDiv.setAttribute("draggable", "true");
                 stickerDiv.setAttribute("data-sticker-id", id);
                 
-                // Content of sticker
+                // Content of sticker: attempts loading PNG image, falls back dynamically to cute emoji if missing
+                // Sticker graphics size increased from w-12 h-12 to w-20 h-20 (80px) for bigger presentation!
                 let stickerGraphics = "";
                 if (customStickers[id]) {
-                    stickerGraphics = `<img src="${customStickers[id]}" class="w-12 h-12 object-contain pointer-events-none" />`;
+                    stickerGraphics = `<img src="${customStickers[id]}" class="w-20 h-20 object-contain pointer-events-none animate-pulse-once" />`;
                 } else {
-                    stickerGraphics = `<div class="w-12 h-12 pointer-events-none flex items-center justify-center">${item.svg}</div>`;
+                    stickerGraphics = `
+                        <div class="relative w-20 h-20 flex items-center justify-center">
+                            <img src="images/${id}.png" 
+                                 alt="Sticker ${id}" 
+                                 class="w-20 h-20 object-contain pointer-events-none relative z-10" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="hidden absolute inset-0 w-20 h-20 flex flex-col items-center justify-center bg-pink-100 rounded-lg text-3xl select-none">
+                                <span>${item.emoji}</span>
+                            </div>
+                        </div>
+                    `;
                 }
 
                 stickerDiv.innerHTML = `
                     ${stickerGraphics}
-                    <span class="text-[10px] font-bold text-slate-400 mt-1">${id}</span>
+                    <span class="text-xs font-bold text-slate-400 mt-2">${id}</span>
                 `;
 
-                // Deskstop drag events
+                // Desktop drag events
                 stickerDiv.addEventListener("dragstart", function(e) {
                     playCuteSound('select');
                     e.dataTransfer.setData("text/plain", id);
@@ -691,12 +543,24 @@
             const stickerId = hasItem ? hasItem.stickerId : null;
 
             // Generate content inside writing area
+            // Placed sticker inside schedule timeslots resized from w-10 h-10 to w-14 h-14 to look beautifully larger!
             let stickerRenderHtml = "";
             if (stickerId) {
                 if (customStickers[stickerId]) {
-                    stickerRenderHtml = `<img src="${customStickers[stickerId]}" class="w-10 h-10 object-contain animate-bounce pointer-events-none" />`;
+                    stickerRenderHtml = `<img src="${customStickers[stickerId]}" class="w-14 h-14 object-contain animate-bounce pointer-events-none" />`;
                 } else if (defaultStickers[stickerId]) {
-                    stickerRenderHtml = `<div class="w-10 h-10 animate-bounce pointer-events-none">${defaultStickers[stickerId].svg}</div>`;
+                    stickerRenderHtml = `
+                        <div class="relative w-14 h-14 flex items-center justify-center animate-bounce">
+                            <img src="images/${stickerId}.png" 
+                                 alt="Sticker ${stickerId}" 
+                                 class="w-14 h-14 object-contain pointer-events-none relative z-10" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="hidden absolute inset-0 w-14 h-14 flex flex-col items-center justify-center bg-pink-100 rounded-lg text-2xl select-none">
+                                <span>${defaultStickers[stickerId].emoji}</span>
+                            </div>
+                        </div>
+                    `;
                 }
             }
 
@@ -704,34 +568,24 @@
             const safeId = `box-${time.replace(':', '-')}`;
 
             div.innerHTML = `
-                <!-- Cloud Hour Badge -->
-                <div class="relative w-18 h-12 flex-shrink-0 flex items-center justify-center filter drop-shadow-[0_2px_4px_rgba(255,183,197,0.25)] hover:scale-105 transition-transform duration-200">
-                    <!-- Kawaii Cloud SVG shape -->
-                    <svg class="absolute inset-0 w-full h-full fill-current text-[#fff4f6] stroke-[#ffcbd5] stroke-2" viewBox="0 0 100 60" preserveAspectRatio="none">
-                        <path d="M 20,45 
-                                 A 15,15 0 0,1 15,20 
-                                 A 18,18 0 0,1 45,10 
-                                 A 18,18 0 0,1 80,18 
-                                 A 15,15 0 0,1 85,45 
-                                 Z" />
-                    </svg>
-                    <!-- Hour Text -->
-                    <span class="relative z-10 title-font text-xs font-bold text-pink-500 tracking-tight">${time}</span>
+                <!-- Clean Hour Text (No SVG background shape as requested) -->
+                <div class="w-16 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
+                    <span class="title-font text-base font-extrabold text-pink-500 tracking-wider">${time}</span>
                 </div>
 
                 <!-- Rounded Writing Box -->
-                <div class="writing-box flex-grow min-h-[56px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
+                <div class="writing-box flex-grow min-h-[72px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
                      id="${safeId}" 
                      data-time="${time}">
                     
                     <!-- Star-pattern inside the box -->
                     <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
 
-                    <!-- Sticker Place Spot -->
-                    <div class="sticker-spot w-12 h-12 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
+                    <!-- Sticker Place Spot (Resized from w-12 h-12 to w-16 h-16 to perfectly host bigger stickers!) -->
+                    <div class="sticker-spot w-16 h-16 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
                         ${stickerRenderHtml ? stickerRenderHtml : `
                             <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
-                                <i class="fa-solid fa-wand-magic text-xs animate-pulse"></i>
+                                <i class="fa-solid fa-wand-magic text-sm mb-0.5 animate-pulse"></i>
                                 <span>stick</span>
                             </div>
                         `}
