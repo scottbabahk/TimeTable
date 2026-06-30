@@ -448,7 +448,6 @@
                 stickerDiv.setAttribute("data-sticker-id", id);
                 
                 // Content of sticker: attempts loading PNG image, falls back dynamically to cute emoji if missing
-                // Sticker graphics size increased from w-12 h-12 to w-20 h-20 (80px) for bigger presentation!
                 let stickerGraphics = "";
                 if (customStickers[id]) {
                     stickerGraphics = `<img src="${customStickers[id]}" class="w-20 h-20 object-contain pointer-events-none animate-pulse-once" />`;
@@ -543,20 +542,20 @@
             const stickerId = hasItem ? hasItem.stickerId : null;
 
             // Generate content inside writing area
-            // Placed sticker inside schedule timeslots resized from w-10 h-10 to w-14 h-14 to look beautifully larger!
+            // Placed sticker inside schedule timeslots resized from w-14 h-14 to w-18 h-18 as requested!
             let stickerRenderHtml = "";
             if (stickerId) {
                 if (customStickers[stickerId]) {
-                    stickerRenderHtml = `<img src="${customStickers[stickerId]}" class="w-14 h-14 object-contain animate-bounce pointer-events-none" />`;
+                    stickerRenderHtml = `<img src="${customStickers[stickerId]}" class="w-18 h-18 object-contain pointer-events-none" />`;
                 } else if (defaultStickers[stickerId]) {
                     stickerRenderHtml = `
-                        <div class="relative w-14 h-14 flex items-center justify-center animate-bounce">
+                        <div class="relative w-18 h-18 flex items-center justify-center">
                             <img src="images/${stickerId}.png" 
                                  alt="Sticker ${stickerId}" 
-                                 class="w-14 h-14 object-contain pointer-events-none relative z-10" 
+                                 class="w-18 h-18 object-contain pointer-events-none relative z-10" 
                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                             />
-                            <div class="hidden absolute inset-0 w-14 h-14 flex flex-col items-center justify-center bg-pink-100 rounded-lg text-2xl select-none">
+                            <div class="hidden absolute inset-0 w-18 h-18 flex flex-col items-center justify-center bg-pink-100 rounded-lg text-3xl select-none">
                                 <span>${defaultStickers[stickerId].emoji}</span>
                             </div>
                         </div>
@@ -568,37 +567,42 @@
             const safeId = `box-${time.replace(':', '-')}`;
 
             div.innerHTML = `
-                <!-- Clean Hour Text (No SVG background shape as requested) -->
-                <div class="w-16 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
-                    <span class="title-font text-base font-extrabold text-pink-500 tracking-wider">${time}</span>
+                <!-- Clean Hour Text (Enlarged from text-base to text-2xl and widened container to w-20) -->
+                <div class="w-20 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
+                    <span class="title-font text-2xl font-extrabold text-pink-500 tracking-wider">${time}</span>
                 </div>
 
-                <!-- Rounded Writing Box -->
-                <div class="writing-box flex-grow min-h-[72px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
+                <!-- Rounded Writing Box (Min height changed from 72px to 88px to fully host larger stickers nicely) -->
+                <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
                      id="${safeId}" 
                      data-time="${time}">
                     
                     <!-- Star-pattern inside the box -->
                     <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
 
-                    <!-- Sticker Place Spot (Resized from w-12 h-12 to w-16 h-16 to perfectly host bigger stickers!) -->
-                    <div class="sticker-spot w-16 h-16 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
+                    <!-- Sticker Place Spot (Resized from w-16 h-16 to w-20 h-20 to perfectly host larger stickers!) -->
+                    <div class="sticker-spot w-20 h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
                         ${stickerRenderHtml ? stickerRenderHtml : `
                             <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
-                                <i class="fa-solid fa-wand-magic text-sm mb-0.5 animate-pulse"></i>
+                                <i class="fa-solid fa-wand-magic text-base mb-0.5 animate-pulse"></i>
                                 <span>stick</span>
                             </div>
                         `}
                     </div>
 
-                    <!-- Custom Notes input -->
-                    <input type="text" 
-                           value="${textVal}" 
-                           placeholder="Type magical plans here..." 
-                           class="relative z-10 flex-grow bg-transparent border-none outline-none text-sm font-semibold text-slate-700 placeholder-slate-400 focus:placeholder-pink-300 transition-colors w-full"
-                           onchange="updateText('${time}', this.value)"
-                           onkeydown="if(event.key === 'Enter') this.blur();"
-                    />
+                    <!-- Custom Notes input Wrapper (Enforced max-w-[240px] to narrow down typing area width) -->
+                    <div class="flex-grow max-w-[240px] relative z-10">
+                        <input type="text" 
+                               value="${textVal}" 
+                               placeholder="Type plans..." 
+                               class="w-full bg-transparent border-none outline-none text-lg font-bold text-slate-700 placeholder-slate-400 focus:placeholder-pink-300 transition-colors"
+                               onchange="updateText('${time}', this.value)"
+                               onkeydown="if(event.key === 'Enter') this.blur();"
+                        />
+                    </div>
+
+                    <!-- Flex spacer to push remaining clear buttons to far right, maintaining compact typing width -->
+                    <div class="flex-grow"></div>
 
                     <!-- Clear Slot Action Button -->
                     ${hasItem ? `
