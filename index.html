@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@400..700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for cute icons -->
+    <!-- FontAwesome 貼紙圖標 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -31,7 +31,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Floating sparkles */
+        /* 飄浮星星特效 */
         .sparkle {
             animation: floatSparkle 4s ease-in-out infinite alternate;
         }
@@ -41,19 +41,19 @@
             100% { transform: translateY(-15px) rotate(15deg) scale(1.2); opacity: 0.3; }
         }
 
-        /* Kawaii double-lined frame */
+        /* 雙線可愛邊框 */
         .magical-border {
             border: 3px solid #ffb7c5;
             box-shadow: 0 0 0 4px #fff, 0 10px 25px rgba(255, 183, 197, 0.4);
         }
 
-        /* Custom star background for task boxes */
+        /* 輸入框背景星光圖案 */
         .star-pattern {
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path d='M15 2l2.2 4.5 5 .7-3.6 3.5.9 4.9-4.5-2.4-4.5 2.4.9-4.9-3.6-3.5 5-.7z' fill='%23ffe6ea' opacity='0.65'/></svg>");
             background-size: 30px 30px;
         }
 
-        /* Drag over effect for slots */
+        /* 拖曳懸停效果 */
         .drag-hover {
             background-color: #fff0f5 !important;
             border: 2px dashed #ff94b1 !important;
@@ -61,7 +61,7 @@
             box-shadow: 0 0 15px rgba(255, 148, 177, 0.3);
         }
 
-        /* Custom scrollbar for cute look */
+        /* 自定義可愛滾動條 */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -77,7 +77,7 @@
             background: #ff94b1;
         }
 
-        /* Floating animation for unicorn */
+        /* 獨角獸飄浮動畫 */
         .unicorn-float {
             animation: unicornFloat 6s ease-in-out infinite;
         }
@@ -87,7 +87,7 @@
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        /* Active sticker selection highlight */
+        /* 選中貼紙高亮效果 */
         .active-sticker {
             border: 3px solid #ff4d88 !important;
             box-shadow: 0 0 15px rgba(255, 77, 136, 0.6) !important;
@@ -103,7 +103,7 @@
 </head>
 <body class="min-h-screen py-6 px-4 md:px-8 text-slate-700 relative overflow-x-hidden">
 
-    <!-- Sparkle Stars Background Elements -->
+    <!-- 背景裝飾星星 -->
     <div class="absolute top-10 left-10 text-pink-300 sparkle text-xl pointer-events-none opacity-60"><i class="fa-solid fa-sparkles"></i></div>
     <div class="absolute top-40 right-20 text-yellow-300 sparkle text-2xl pointer-events-none opacity-60" style="animation-delay: 1s;"><i class="fa-solid fa-star"></i></div>
     <div class="absolute bottom-20 left-16 text-indigo-300 sparkle text-lg pointer-events-none opacity-60" style="animation-delay: 2s;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
@@ -111,14 +111,14 @@
 
     <div class="max-w-6xl mx-auto bg-white/75 backdrop-blur-md rounded-[32px] p-6 md:p-8 magical-border relative">
         
-        <!-- TOP CORNER DECORATIONS -->
+        <!-- 角落裝飾星星 -->
         <div class="absolute top-3 left-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
         <div class="absolute top-3 right-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
 
-        <!-- HEADER SECTION -->
+        <!-- 標頭區域 -->
         <header class="relative mb-8 text-center flex flex-col items-center justify-center pt-4 pb-2">
             
-            <!-- Rainbow Arch SVG Background -->
+            <!-- 彩虹背景 SVG -->
             <div class="absolute -top-6 w-full max-w-lg h-32 opacity-80 pointer-events-none -z-10">
                 <svg viewBox="0 0 500 150" class="w-full h-full">
                     <path d="M 50,150 A 200,200 0 0,1 450,150" fill="none" stroke="#ffe5ec" stroke-width="24" />
@@ -129,7 +129,7 @@
                 </svg>
             </div>
 
-            <!-- Title Layout -->
+            <!-- 標題佈局 -->
             <div class="relative z-10 flex flex-col md:flex-row items-center justify-center gap-4">
                 
                 <div class="text-left text-center md:text-left">
@@ -142,41 +142,32 @@
                     <p class="text-sm text-slate-500 italic mt-1 font-medium">Design your magical day! Drag or tap stickers onto timeslots! ✨🦄</p>
                 </div>
 
-                <!-- Cute Unicorn on a Cloud -->
+                <!-- 雲朵上的可愛獨角獸 -->
                 <div class="unicorn-float relative w-28 h-28 flex items-center justify-center">
-                    <!-- SVG cloud at the bottom of unicorn -->
                     <svg class="absolute bottom-0 w-24 h-10 text-white fill-current filter drop-shadow-sm" viewBox="0 0 100 40">
                         <path d="M10 30 Q 15 15, 30 20 Q 45 10, 60 20 Q 75 10, 85 25 Q 95 30, 90 35 L 10 35 Z" />
                         <circle cx="20" cy="28" r="8" />
                         <circle cx="45" cy="20" r="10" />
                         <circle cx="70" cy="24" r="9" />
                     </svg>
-                    <!-- Simple Cute Unicorn SVG -->
                     <svg class="absolute bottom-4 w-16 h-18" viewBox="0 0 64 64">
-                        <!-- Head -->
                         <path d="M15 35 C 10 25, 25 15, 38 20 C 45 23, 48 30, 48 38 C 48 48, 25 50, 15 42 Z" fill="#ffffff" stroke="#ffcbd5" stroke-width="2"/>
-                        <!-- Muzzle -->
                         <path d="M15 35 C 12 33, 14 26, 22 24 C 26 23, 27 28, 25 32 Z" fill="#ffe5ec" />
-                        <circle cx="19" cy="28" r="1" fill="#ff4d88" /> <!-- Nostril -->
-                        <!-- Eye -->
-                        <path d="M30 28 Q 32 25, 34 28" stroke="#ff4d88" stroke-width="2" fill="none" stroke-linecap="round"/> <!-- Sleepy eye -->
-                        <!-- Horn -->
+                        <circle cx="19" cy="28" r="1" fill="#ff4d88" />
+                        <path d="M30 28 Q 32 25, 34 28" stroke="#ff4d88" stroke-width="2" fill="none" stroke-linecap="round"/>
                         <polygon points="38,20 45,5 34,16" fill="#ffe66d" stroke="#f4d35e" stroke-width="1" />
-                        <!-- Ears -->
                         <path d="M28 18 C 28 12, 32 12, 32 18 Z" fill="#ffffff" stroke="#ffcbd5" stroke-width="1.5" />
                         <path d="M29 17 C 29 14, 31 14, 31 17 Z" fill="#ffe5ec" />
-                        <!-- Mane -->
                         <path d="M38 18 C 42 12, 48 15, 52 24 C 54 28, 50 32, 45 30" fill="#c3ecf7" />
                         <path d="M43 25 C 47 22, 52 26, 54 34 C 55 38, 50 40, 46 36" fill="#ffcbd5" />
                         <path d="M44 32 C 48 30, 52 34, 53 40 C 53 44, 48 44, 44 40" fill="#fff5b2" />
-                        <!-- Cute blush -->
                         <ellipse cx="29" cy="34" rx="4" ry="2" fill="#ffb7c5" opacity="0.6" />
                     </svg>
                 </div>
             </div>
         </header>
 
-        <!-- ACTION BUTTONS BAR -->
+        <!-- 功能按鈕列 -->
         <div class="flex flex-wrap justify-center gap-3 mb-6">
             <button onclick="clearAllSlots()" class="px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95">
                 <i class="fa-solid fa-trash-can"></i> Reset Board
@@ -192,40 +183,40 @@
             </button>
         </div>
 
-        <!-- MAIN LAYOUT GRID -->
+        <!-- 主要版面網格 -->
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
             
-            <!-- LEFT AREA: THE TIMETABLE (COLUMNS 1 & 2) -->
+            <!-- 左側：時間表欄位 -->
             <div id="print-area" class="lg:col-span-3 bg-white/90 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-dashed border-pink-100 star-pattern">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                     
-                    <!-- LEFT COLUMN: Morning to Afternoon (08:00 - 14:00) -->
+                    <!-- 左欄：上午到中午 (08:00 - 14:00) -->
                     <div>
                         <h3 class="title-font text-lg font-bold text-sky-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-sky-100 pb-2">
                             <i class="fa-solid fa-sun-cloud text-yellow-400 animate-pulse"></i> Morning & Afternoon
                         </h3>
                         <div class="space-y-4" id="morning-slots">
-                            <!-- JS will inject slots 08:00 - 14:00 -->
+                            <!-- 由 JS 動態生成 08:00 - 14:00 -->
                         </div>
                     </div>
 
-                    <!-- RIGHT COLUMN: Afternoon to Evening (15:00 - 22:00) -->
+                    <!-- 右欄：下午到晚上 (15:00 - 22:00) -->
                     <div class="mt-6 md:mt-0">
                         <h3 class="title-font text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-indigo-100 pb-2">
                             <i class="fa-solid fa-moon-stars text-indigo-300"></i> Afternoon & Night
                         </h3>
                         <div class="space-y-4" id="evening-slots">
-                            <!-- JS will inject slots 15:00 - 22:00 -->
+                            <!-- 由 JS 動態生成 15:00 - 22:00 -->
                         </div>
                     </div>
 
                 </div>
             </div>
 
-            <!-- RIGHT AREA: STICKER DRAWER & CONTROLS -->
+            <!-- 右側：貼紙選單與上傳控制 -->
             <div class="lg:col-span-1 space-y-6">
                 
-                <!-- STICKER DRAWER PANEL -->
+                <!-- 貼紙抽屜面板 -->
                 <div class="bg-gradient-to-b from-pink-50 to-purple-50 rounded-2xl p-5 border-2 border-pink-200 shadow-sm relative">
                     
                     <h3 class="title-font text-lg font-bold text-pink-500 mb-2 flex items-center gap-2 border-b border-pink-200 pb-2">
@@ -236,18 +227,18 @@
                         ✨ <b>Drag</b> any sticker directly to a schedule slot, OR <b>Tap</b> a sticker below and then <b>Tap</b> your desired time slot!
                     </p>
 
-                    <!-- Sticker Grid (Changed to 2 columns as requested) -->
+                    <!-- 貼紙網格（每行2個） -->
                     <div class="grid grid-cols-2 gap-3" id="stickers-container">
-                        <!-- JS Injecting 10 Stickers (001 - 010) -->
+                        <!-- 由 JS 動態生成貼紙 (001 - 010) -->
                     </div>
 
-                    <!-- Help banner inside Drawer -->
+                    <!-- 提示資訊 -->
                     <div class="mt-4 pt-3 border-t border-dashed border-pink-200 text-center text-xs text-pink-400 font-semibold animate-pulse">
                         <i class="fa-solid fa-sparkles"></i> Double tap any slot sticker to remove it!
                     </div>
                 </div>
 
-                <!-- PNG STICKER MANAGER (Allows upload of 001.png - 010.png) -->
+                <!-- 自定義 PNG 貼紙上傳管理 -->
                 <div class="bg-white/80 rounded-2xl p-5 border-2 border-sky-100 shadow-sm">
                     <h4 class="title-font text-sm font-bold text-sky-500 mb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-file-image"></i> Custom Sticker Upload
@@ -274,7 +265,7 @@
 
         </div>
 
-        <!-- FOOTER INFO -->
+        <!-- 頁尾資訊 -->
         <footer class="mt-8 text-center text-slate-400 text-xs flex flex-col items-center justify-center gap-1 border-t border-pink-100/50 pt-4">
             <p>Made with ✨ magic and love for little stars. ✨</p>
             <p>© 2026 My Magical Daily Timetable. Sparkle on!</p>
@@ -282,13 +273,13 @@
 
     </div>
 
-    <!-- NOTIFICATION SYSTEM MODAL -->
+    <!-- 提示框系統 -->
     <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
         <span id="toast-icon">✨</span>
         <span id="toast-message">Board Reset Successful!</span>
     </div>
 
-    <!-- PREVIEW/PRINT MODAL -->
+    <!-- 列印 / 預覽彈窗 -->
     <div id="print-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative magical-border max-h-[90vh] overflow-y-auto">
             <button onclick="closePrintModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
@@ -298,7 +289,7 @@
             <p class="text-xs text-slate-500 text-center mb-6">Use your browser print utility to save as PDF or Print beautifully on paper!</p>
             
             <div id="print-preview-container" class="border rounded-2xl p-4 bg-white shadow-inner overflow-hidden">
-                <!-- Preview injected here -->
+                <!-- 預覽內容 -->
             </div>
 
             <div class="mt-6 flex justify-center gap-3">
@@ -312,9 +303,9 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- 腳本邏輯 -->
     <script>
-        // Default definition referencing images 001 - 010 with cute fallbacks
+        // 默認貼紙定義，對應本地 images 001.png - 010.png 
         const defaultStickers = {
             "001": { name: "Magic Book", emoji: "📚", img: "images/001.png" },
             "002": { name: "Star Wand", emoji: "🪄", img: "images/002.png" },
@@ -328,17 +319,31 @@
             "010": { name: "Sleepy Moon", emoji: "🌙", img: "images/010.png" }
         };
 
-        // Slots definitions
-        const morningSlotsDef = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
-        const eveningSlotsDef = ["15:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"]; // 16:00 is skipped as specified
+        // 貼紙對應自動填入的文字對照表
+        const stickerTextMap = {
+            "001": "Wake Up",
+            "002": "Breakfast",
+            "003": "Learning Activity",
+            "004": "Self-Study",
+            "005": "Lunch",
+            "006": "Tea",
+            "007": "Dinner",
+            "008": "Piano",
+            "009": "Playtime",
+            "010": "Bedtime"
+        };
 
-        // App state
-        let boardState = {}; // { "08:00": { stickerId: "001", text: "Math class" } }
-        let customStickers = {}; // Store uploaded base64 data for "001" - "010"
-        let activeSelectedStickerId = null; // For mobile tap-to-place flow
+        // 時間表定義（跳過 16:00 欄位）
+        const morningSlotsDef = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
+        const eveningSlotsDef = ["15:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+
+        // 應用狀態
+        let boardState = {}; // 格式為 { "08:00": { stickerId: "001", text: "Wake Up" } }
+        let customStickers = {}; // 存放上傳自定義貼紙的 Base64 數據
+        let activeSelectedStickerId = null; // 手機點擊選中貼紙流
         let audioEnabled = true;
 
-        // Audio synthesizer using Web Audio API for cute game-like sound effects
+        // 音效合成器
         let audioCtx = null;
         function playCuteSound(type) {
             if (!audioEnabled) return;
@@ -350,7 +355,6 @@
                 const now = audioCtx.currentTime;
                 
                 if (type === 'select') {
-                    // Quick short pop sound
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
                     osc.type = 'sine';
@@ -364,7 +368,6 @@
                     osc.stop(now + 0.12);
                 } 
                 else if (type === 'drop') {
-                    // Magical chime sound
                     let osc1 = audioCtx.createOscillator();
                     let osc2 = audioCtx.createOscillator();
                     let gain1 = audioCtx.createGain();
@@ -393,7 +396,6 @@
                     osc2.stop(now + 0.35);
                 } 
                 else if (type === 'clear') {
-                    // Whimsical swoosh sound descending
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
                     osc.type = 'sine';
@@ -407,14 +409,13 @@
                     osc.stop(now + 0.26);
                 }
             } catch (e) {
-                console.log("Audio not allowed or blocked by browser policy until interaction.", e);
+                console.log("Audio contexts can't start automatically.", e);
             }
         }
 
         function toggleAudio() {
             audioEnabled = !audioEnabled;
             const btn = document.getElementById("audioBtn");
-            const icon = document.getElementById("audioIcon");
             if (audioEnabled) {
                 btn.className = "px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95";
                 btn.innerHTML = `<i id="audioIcon" class="fa-solid fa-volume-high"></i> Magic Sounds: On`;
@@ -425,7 +426,7 @@
             showToast("Audio toggled!", "✨");
         }
 
-        // Initialize elements on Window Load
+        // 初始化加載
         window.onload = function() {
             loadFromStorage();
             renderStickerDrawer();
@@ -434,7 +435,7 @@
             setupPngUploader();
         };
 
-        // Render stickers to drawer
+        // 渲染貼紙選擇面板
         function renderStickerDrawer() {
             const container = document.getElementById("stickers-container");
             container.innerHTML = "";
@@ -447,10 +448,9 @@
                 stickerDiv.setAttribute("draggable", "true");
                 stickerDiv.setAttribute("data-sticker-id", id);
                 
-                // Content of sticker: attempts loading PNG image, falls back dynamically to cute emoji if missing
                 let stickerGraphics = "";
                 if (customStickers[id]) {
-                    stickerGraphics = `<img src="${customStickers[id]}" class="w-20 h-20 object-contain pointer-events-none animate-pulse-once" />`;
+                    stickerGraphics = `<img src="${customStickers[id]}" class="w-20 h-20 object-contain pointer-events-none" />`;
                 } else {
                     stickerGraphics = `
                         <div class="relative w-20 h-20 flex items-center justify-center">
@@ -471,7 +471,7 @@
                     <span class="text-xs font-bold text-slate-400 mt-2">${id}</span>
                 `;
 
-                // Desktop drag events
+                // 拖曳開始事件
                 stickerDiv.addEventListener("dragstart", function(e) {
                     playCuteSound('select');
                     e.dataTransfer.setData("text/plain", id);
@@ -482,7 +482,7 @@
                     stickerDiv.classList.remove("opacity-50");
                 });
 
-                // Mobile/Click Tap Selector event
+                // 手機點擊選中事件
                 stickerDiv.addEventListener("click", function() {
                     playCuteSound('select');
                     selectStickerForTap(id);
@@ -492,15 +492,13 @@
             });
         }
 
-        // Handle Mobile/Tap-to-place active state
+        // 處理手機選取高亮狀態
         function selectStickerForTap(id) {
-            // Remove previous active classes
             document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
                 el.classList.remove("active-sticker");
             });
 
             if (activeSelectedStickerId === id) {
-                // Deselect if already selected
                 activeSelectedStickerId = null;
             } else {
                 activeSelectedStickerId = id;
@@ -512,7 +510,7 @@
             }
         }
 
-        // Render the timeslots
+        // 渲染日程欄位
         function renderScheduleSlots() {
             const morningContainer = document.getElementById("morning-slots");
             const eveningContainer = document.getElementById("evening-slots");
@@ -520,18 +518,16 @@
             morningContainer.innerHTML = "";
             eveningContainer.innerHTML = "";
 
-            // Inject Morning Slots
             morningSlotsDef.forEach(time => {
                 morningContainer.appendChild(createSlotElement(time));
             });
 
-            // Inject Evening Slots
             eveningSlotsDef.forEach(time => {
                 eveningContainer.appendChild(createSlotElement(time));
             });
         }
 
-        // Helper to construct interactive Slot HTML
+        // 創建日程單一欄位 HTML 結構
         function createSlotElement(time) {
             const div = document.createElement("div");
             div.className = "flex items-center gap-3 transition-all duration-300 group";
@@ -541,8 +537,6 @@
             const textVal = hasItem ? hasItem.text : "";
             const stickerId = hasItem ? hasItem.stickerId : null;
 
-            // Generate content inside writing area
-            // Placed sticker inside schedule timeslots resized from w-14 h-14 to w-18 h-18 as requested!
             let stickerRenderHtml = "";
             if (stickerId) {
                 if (customStickers[stickerId]) {
@@ -563,24 +557,23 @@
                 }
             }
 
-            // Create a safe, non-colon ID identifier for CSS selector queries
             const safeId = `box-${time.replace(':', '-')}`;
 
             div.innerHTML = `
-                <!-- Clean Hour Text (Enlarged from text-base to text-2xl and widened container to w-20) -->
+                <!-- 時間標題大小提升至 2xl 且容器加寬 -->
                 <div class="w-20 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
                     <span class="title-font text-2xl font-extrabold text-pink-500 tracking-wider">${time}</span>
                 </div>
 
-                <!-- Rounded Writing Box (Min height changed from 72px to 88px to fully host larger stickers nicely) -->
+                <!-- 圓角輸入卡片（高度提升至 88px） -->
                 <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
                      id="${safeId}" 
                      data-time="${time}">
                     
-                    <!-- Star-pattern inside the box -->
+                    <!-- 背景亮麗小星星 -->
                     <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
 
-                    <!-- Sticker Place Spot (Resized from w-16 h-16 to w-20 h-20 to perfectly host larger stickers!) -->
+                    <!-- 放置貼紙的大格子（w-20 h-20） -->
                     <div class="sticker-spot w-20 h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
                         ${stickerRenderHtml ? stickerRenderHtml : `
                             <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
@@ -590,7 +583,7 @@
                         `}
                     </div>
 
-                    <!-- Custom Notes input Wrapper (Enforced max-w-[240px] to narrow down typing area width) -->
+                    <!-- 輸入欄位（寬度最大限制 240px，字體加大至 text-lg） -->
                     <div class="flex-grow max-w-[240px] relative z-10">
                         <input type="text" 
                                value="${textVal}" 
@@ -601,10 +594,9 @@
                         />
                     </div>
 
-                    <!-- Flex spacer to push remaining clear buttons to far right, maintaining compact typing width -->
                     <div class="flex-grow"></div>
 
-                    <!-- Clear Slot Action Button -->
+                    <!-- 清除按鈕 -->
                     ${hasItem ? `
                         <button onclick="clearSingleSlot('${time}')" class="relative z-10 text-rose-300 hover:text-rose-500 hover:scale-110 active:scale-95 transition-all text-xs p-1 bg-rose-50 rounded-full w-5 h-5 flex items-center justify-center border border-rose-100 shadow-sm" title="Clear this slot">
                             <i class="fa-solid fa-xmark"></i>
@@ -614,7 +606,7 @@
                 </div>
             `;
 
-            // Double click on sticker spot to clear it
+            // 雙擊貼紙重置該欄位
             const spot = div.querySelector('.sticker-spot');
             spot.addEventListener('dblclick', function() {
                 if (boardState[time] && boardState[time].stickerId) {
@@ -622,14 +614,12 @@
                 }
             });
 
-            // Tap/Click handler for mobile/desktop placement click (selected via class name to avoid selector issues)
+            // 點擊事件（避免打字與清除按鈕衝突）
             const writingBox = div.querySelector('.writing-box');
             writingBox.addEventListener('click', function(e) {
-                // Ensure the click didn't come from input typing or clear button
                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
                     if (activeSelectedStickerId) {
                         placeSticker(time, activeSelectedStickerId);
-                        // Clear selection glow
                         document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
                             el.classList.remove("active-sticker");
                         });
@@ -641,14 +631,12 @@
             return div;
         }
 
-        // Drop & Drag Native Events Binding
+        // 拖曳核心事件綁定
         function setupDragAndDrop() {
-            // Dragover to allow drop
             document.addEventListener("dragover", function(e) {
                 e.preventDefault();
             });
 
-            // Add listener to target drop areas
             document.addEventListener("dragenter", function(e) {
                 const dropBox = e.target.closest(".writing-box");
                 if (dropBox) {
@@ -677,19 +665,25 @@
             });
         }
 
-        // Place sticker logic
+        // 放置貼紙與文字自動配對邏輯
         function placeSticker(time, stickerId) {
             playCuteSound('drop');
             if (!boardState[time]) {
                 boardState[time] = { stickerId: "", text: "" };
             }
             boardState[time].stickerId = stickerId;
+
+            // 重要修改：如果該貼紙在對照表中有對應文字，則自動填入文字框內
+            if (stickerTextMap[stickerId]) {
+                boardState[time].text = stickerTextMap[stickerId];
+            }
+
             renderScheduleSlots();
             autoSaveToStorage();
             showToast(`Added sticker to ${time}! ✨`, "🌸");
         }
 
-        // Update text logic
+        // 修改文字內容
         function updateText(time, val) {
             if (!boardState[time]) {
                 boardState[time] = { stickerId: "", text: "" };
@@ -698,7 +692,7 @@
             autoSaveToStorage();
         }
 
-        // Clear a single slot
+        // 清除單一欄位
         function clearSingleSlot(time) {
             playCuteSound('clear');
             delete boardState[time];
@@ -707,7 +701,7 @@
             showToast(`Slot ${time} cleared!`, "🧹");
         }
 
-        // Clear all slots on the board
+        // 重置整個看板
         function clearAllSlots() {
             playCuteSound('clear');
             boardState = {};
@@ -716,7 +710,7 @@
             showToast("Timetable board reset completely!", "🧹");
         }
 
-        // Storage Management
+        // 保存管理
         function autoSaveToStorage() {
             localStorage.setItem("magical_timetable_state", JSON.stringify(boardState));
         }
@@ -746,7 +740,7 @@
             }
         }
 
-        // Setup Custom PNG Uploader
+        // 自定義 PNG 貼紙上傳
         function setupPngUploader() {
             const fileInput = document.getElementById("png-uploader");
             const statusIndicator = document.getElementById("upload-status");
@@ -757,9 +751,8 @@
 
                 let loadCount = 0;
                 Array.from(files).forEach(file => {
-                    // Extract sticker slot number from filename, e.g. "001.png" -> "001"
                     const name = file.name;
-                    const match = name.match(/0*(10|[1-9])/); // finds 1-10 inside filename
+                    const match = name.match(/0*(10|[1-9])/);
                     let stickerId = "";
                     
                     if (match) {
@@ -769,9 +762,7 @@
                         }
                     }
 
-                    // Fallback to sequential slot placement if name pattern doesn't match
                     if (!stickerId) {
-                        // Let's find first empty custom sticker, or cycle through slots
                         stickerId = String((loadCount % 10) + 1).padStart(3, '0');
                     }
 
@@ -795,7 +786,7 @@
             });
         }
 
-        // Cute Toast System
+        // 彈窗小提示
         function showToast(message, icon = "✨") {
             const toast = document.getElementById("toast");
             const toastMessage = document.getElementById("toast-message");
@@ -811,16 +802,13 @@
             }, 3000);
         }
 
-        // Print & Export Layout Builder
+        // 列印與導出佈局生成
         function exportToImage() {
             playCuteSound('drop');
             const previewContainer = document.getElementById("print-preview-container");
             const srcBoard = document.getElementById("print-area");
             
-            // Clone the timetable board into clean, style-compatible structure for printing
             const clone = srcBoard.cloneNode(true);
-            
-            // Clean up editable fields by matching their text content so it shows up beautifully in static print
             const originalInputs = srcBoard.querySelectorAll('input');
             const clonedInputs = clone.querySelectorAll('input');
             
@@ -828,24 +816,19 @@
                 const textValue = input.value;
                 const parent = clonedInputs[index].parentNode;
                 
-                // Create a beautiful printed text element instead of an input field
                 const span = document.createElement('span');
-                span.className = "text-sm font-semibold text-slate-700 block py-1 border-b border-dashed border-pink-100 flex-grow pl-1";
+                span.className = "text-lg font-bold text-slate-700 block py-1 border-b border-dashed border-pink-100 flex-grow pl-1";
                 span.innerText = textValue || "────────────────────";
                 
-                // Replace the input with the static styled span
                 parent.replaceChild(span, clonedInputs[index]);
 
-                // Hide clear button in clones
-                const btn = parent.querySelector('button');
+                const btn = parent.parentNode.querySelector('button');
                 if (btn) btn.style.display = 'none';
             });
 
-            // Put layout preview into container
             previewContainer.innerHTML = "";
             previewContainer.appendChild(clone);
             
-            // Open print modal
             document.getElementById("print-modal").classList.remove("hidden");
         }
 
@@ -858,7 +841,7 @@
         }
     </script>
 
-    <!-- PRINT STYLESHEET OVERRIDE FOR TRUE PORTRAIT PAGE PRESERVATION -->
+    <!-- 列印特定樣式設定 -->
     <style>
         @media print {
             body * {
@@ -880,11 +863,9 @@
             #print-preview-container, #print-preview-container * {
                 visibility: visible;
             }
-            /* Hide print instructions and control buttons */
             #print-modal button, #print-modal p, #print-modal h3 {
                 display: none !important;
             }
-            /* Fill the layout perfectly */
             #print-preview-container {
                 border: none !important;
                 box-shadow: none !important;
