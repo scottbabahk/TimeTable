@@ -333,9 +333,13 @@
             "010": "Bedtime"
         };
 
-        // 時間表定義（跳過 16:00 欄位）
+        // 預設時間表定義（跳過 16:00 欄位）
         const morningSlotsDef = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
         const eveningSlotsDef = ["15:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+
+        // 實際運作的時間表狀態（支持自定義修改並保存）
+        let morningSlots = [...morningSlotsDef];
+        let eveningSlots = [...eveningSlotsDef];
 
         // 應用狀態
         let boardState = {}; // 格式為 { "08:00": { stickerId: "001", text: "Wake Up" } }
@@ -435,7 +439,7 @@
             setupPngUploader();
         };
 
-        // 渲染貼紙選擇面板
+        // Render stickers to drawer
         function renderStickerDrawer() {
             const container = document.getElementById("stickers-container");
             container.innerHTML = "";
@@ -518,17 +522,17 @@
             morningContainer.innerHTML = "";
             eveningContainer.innerHTML = "";
 
-            morningSlotsDef.forEach(time => {
-                morningContainer.appendChild(createSlotElement(time));
+            morningSlots.forEach(time => {
+                morningContainer.appendChild(createSlotElement(time, 'morning'));
             });
 
-            eveningSlotsDef.forEach(time => {
-                eveningContainer.appendChild(createSlotElement(time));
+            eveningSlots.forEach(time => {
+                eveningContainer.appendChild(createSlotElement(time, 'evening'));
             });
         }
 
         // 創建日程單一欄位 HTML 結構
-        function createSlotElement(time) {
+        function createSlotElement(time, column) {
             const div = document.createElement("div");
             div.className = "flex items-center gap-3 transition-all duration-300 group";
             div.setAttribute("data-time", time);
@@ -560,9 +564,14 @@
             const safeId = `box-${time.replace(':', '-')}`;
 
             div.innerHTML = `
-                <!-- 時間標題大小提升至 2xl 且容器加寬 -->
+                <!-- 時間標題改為可直接打字編輯的 Input 輸入框 -->
                 <div class="w-20 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
-                    <span class="title-font text-2xl font-extrabold text-pink-500 tracking-wider">${time}</span>
+                    <input type="text" 
+                           value="${time}" 
+                           placeholder="00:00"
+                           class="title-font text-2xl font-extrabold text-pink-500 tracking-wider bg-transparent border-none outline-none w-20 text-center focus:bg-pink-50 rounded-lg"
+                           onchange="updateTime('${time}', this.value, '${column}')"
+                    />
                 </div>
 
                 <!-- 圓角輸入卡片（高度提升至 88px） -->
@@ -583,15 +592,14 @@
                         `}
                     </div>
 
-                    <!-- 輸入欄位（寬度最大限制 240px，字體加大至 text-lg） -->
-                    <div class="flex-grow max-w-[240px] relative z-10">
-                        <input type="text" 
-                               value="${textVal}" 
+                    <!-- 輸入欄位（改為 textarea 以容許多行文字輸入，保持最大寬度 240px，字體 text-lg 粗體） -->
+                    <div class="flex-grow max-w-[240px] relative z-10 flex items-center">
+                        <textarea 
                                placeholder="Type plans..." 
-                               class="w-full bg-transparent border-none outline-none text-lg font-bold text-slate-700 placeholder-slate-400 focus:placeholder-pink-300 transition-colors"
+                               rows="2"
+                               class="w-full bg-transparent border-none outline-none text-lg font-bold text-slate-700 placeholder-slate-400 focus:placeholder-pink-300 transition-colors resize-none leading-tight py-1"
                                onchange="updateText('${time}', this.value)"
-                               onkeydown="if(event.key === 'Enter') this.blur();"
-                        />
+                        >${textVal}</textarea>
                     </div>
 
                     <div class="flex-grow"></div>
@@ -617,7 +625,7 @@
             // 點擊事件（避免打字與清除按鈕衝突）
             const writingBox = div.querySelector('.writing-box');
             writingBox.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
                     if (activeSelectedStickerId) {
                         placeSticker(time, activeSelectedStickerId);
                         document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
@@ -665,6 +673,36 @@
             });
         }
 
+        // 編輯時間自定義邏輯
+        function updateTime(oldTime, newTime, column) {
+            newTime = newTime.trim();
+            if (!newTime) {
+                renderScheduleSlots(); // 為空時恢復原先時間
+                return;
+            }
+            if (oldTime === newTime) return;
+
+            // 在 morningSlots 或 eveningSlots 清單中更換時間標籤
+            if (column === 'morning') {
+                const idx = morningSlots.indexOf(oldTime);
+                if (idx !== -1) morningSlots[idx] = newTime;
+            } else {
+                const idx = eveningSlots.indexOf(oldTime);
+                if (idx !== -1) eveningSlots[idx] = newTime;
+            }
+
+            // 更新 boardState 鍵值
+            if (boardState[oldTime]) {
+                boardState[newTime] = { ...boardState[oldTime] };
+                delete boardState[oldTime];
+            }
+
+            autoSaveSlots();
+            autoSaveToStorage();
+            renderScheduleSlots();
+            showToast("Time updated! ⏰", "💖");
+        }
+
         // 放置貼紙與文字自動配對邏輯
         function placeSticker(time, stickerId) {
             playCuteSound('drop');
@@ -673,7 +711,7 @@
             }
             boardState[time].stickerId = stickerId;
 
-            // 重要修改：如果該貼紙在對照表中有對應文字，則自動填入文字框內
+            // 如果該貼紙在對照表中有對應文字，則自動填入文字框內
             if (stickerTextMap[stickerId]) {
                 boardState[time].text = stickerTextMap[stickerId];
             }
@@ -701,13 +739,22 @@
             showToast(`Slot ${time} cleared!`, "🧹");
         }
 
-        // 重置整個看板
+        // 重置整個看板（包含將時間表恢復為預設格式）
         function clearAllSlots() {
             playCuteSound('clear');
             boardState = {};
+            morningSlots = [...morningSlotsDef];
+            eveningSlots = [...eveningSlotsDef];
+            autoSaveSlots();
             renderScheduleSlots();
             autoSaveToStorage();
             showToast("Timetable board reset completely!", "🧹");
+        }
+
+        // 保存定義好的自定義時段
+        function autoSaveSlots() {
+            localStorage.setItem("magical_morning_slots", JSON.stringify(morningSlots));
+            localStorage.setItem("magical_evening_slots", JSON.stringify(eveningSlots));
         }
 
         // 保存管理
@@ -717,11 +764,26 @@
 
         function saveTimetable() {
             autoSaveToStorage();
+            autoSaveSlots();
             playCuteSound('drop');
             showToast("Progress saved to your browser! 🦄✨", "💖");
         }
 
         function loadFromStorage() {
+            // 讀取自定義時間槽
+            const savedMorning = localStorage.getItem("magical_morning_slots");
+            const savedEvening = localStorage.getItem("magical_evening_slots");
+            if (savedMorning) {
+                try { morningSlots = JSON.parse(savedMorning); } catch(e) {}
+            } else {
+                morningSlots = [...morningSlotsDef];
+            }
+            if (savedEvening) {
+                try { eveningSlots = JSON.parse(savedEvening); } catch(e) {}
+            } else {
+                eveningSlots = [...eveningSlotsDef];
+            }
+
             const saved = localStorage.getItem("magical_timetable_state");
             if (saved) {
                 try {
@@ -809,19 +871,28 @@
             const srcBoard = document.getElementById("print-area");
             
             const clone = srcBoard.cloneNode(true);
-            const originalInputs = srcBoard.querySelectorAll('input');
-            const clonedInputs = clone.querySelectorAll('input');
             
-            originalInputs.forEach((input, index) => {
-                const textValue = input.value;
-                const parent = clonedInputs[index].parentNode;
-                
+            // 將克隆的時間 input 替換為靜態 span 用於列印
+            const timeInputs = clone.querySelectorAll('.w-20 input');
+            timeInputs.forEach(input => {
+                const val = input.value;
+                const parent = input.parentNode;
                 const span = document.createElement('span');
-                span.className = "text-lg font-bold text-slate-700 block py-1 border-b border-dashed border-pink-100 flex-grow pl-1";
-                span.innerText = textValue || "────────────────────";
-                
-                parent.replaceChild(span, clonedInputs[index]);
+                span.className = "title-font text-2xl font-extrabold text-pink-500 tracking-wider";
+                span.innerText = val;
+                parent.replaceChild(span, input);
+            });
 
+            // 將克隆的 textarea 替換為靜態帶格式的 span 用於列印
+            const textareas = clone.querySelectorAll('.writing-box textarea');
+            textareas.forEach(textarea => {
+                const val = textarea.value;
+                const parent = textarea.parentNode;
+                const span = document.createElement('span');
+                span.className = "text-lg font-bold text-slate-700 block py-1 pl-1 whitespace-pre-wrap text-left";
+                span.innerText = val || "────────────────────";
+                parent.replaceChild(span, textarea);
+                
                 const btn = parent.parentNode.querySelector('button');
                 if (btn) btn.style.display = 'none';
             });
