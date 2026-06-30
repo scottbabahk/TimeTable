@@ -242,7 +242,7 @@
 
                     <!-- 提示資訊 -->
                     <div class="mt-4 pt-3 border-t border-dashed border-pink-200 text-center text-xs text-pink-400 font-semibold animate-pulse">
-                        <i class="fa-solid fa-sparkles"></i> Double tap any slot sticker to remove it!
+                        <i class="fa-solid fa-sparkles"></i> Double tap a sticker inside the slot to remove it!
                     </div>
                 </div>
 
@@ -350,10 +350,10 @@
         let eveningSlots = [...eveningSlotsDef];
 
         // 應用狀態
-        let boardState = {}; // 格式為 { "08:00": { stickerId: "001", text: "Wake Up" } }
+        let boardState = {}; // 格式為 { "08:00": { stickers: ["001", "002"], text: "Wake Up" } }
         let customStickers = {}; // 存放上傳自定義貼紙的 Base64 數據
         let activeSelectedStickerId = null; // 手機點擊選中右側面板貼紙流
-        let activeSourceTime = null; // 新增：存放當前選中準備進行對調/轉移的時間槽來源
+        let activeSourceTime = null; // 存放當前選中準備進行對調/轉移的時間槽來源
         let audioEnabled = true;
 
         // 音效合成器
@@ -448,7 +448,7 @@
             setupPngUploader();
         };
 
-        // Render stickers to drawer
+        // 渲染貼紙選擇面板
         function renderStickerDrawer() {
             const container = document.getElementById("stickers-container");
             container.innerHTML = "";
@@ -553,26 +553,58 @@
 
             const hasItem = boardState[time];
             const textVal = hasItem ? hasItem.text : "";
-            const stickerId = hasItem ? hasItem.stickerId : null;
+            
+            // 讀取該時段所有的貼紙
+            let stickersArray = [];
+            if (hasItem) {
+                if (hasItem.stickers) {
+                    stickersArray = hasItem.stickers;
+                } else if (hasItem.stickerId) {
+                    // 相容舊格式
+                    stickersArray = [hasItem.stickerId];
+                }
+            }
 
+            // 動態調整多貼紙的排版與大小，以完美地塞入 w-20 h-20 的展示框
             let stickerRenderHtml = "";
-            if (stickerId) {
-                if (customStickers[stickerId]) {
-                    stickerRenderHtml = `<img src="${customStickers[stickerId]}" class="w-18 h-18 object-contain pointer-events-none" />`;
-                } else if (defaultStickers[stickerId]) {
-                    stickerRenderHtml = `
-                        <div class="relative w-18 h-18 flex items-center justify-center">
-                            <img src="images/${stickerId}.png" 
-                                 alt="Sticker ${stickerId}" 
-                                 class="w-18 h-18 object-contain pointer-events-none relative z-10" 
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                            />
-                            <div class="hidden absolute inset-0 w-18 h-18 flex flex-col items-center justify-center bg-pink-100 rounded-lg text-3xl select-none">
-                                <span>${defaultStickers[stickerId].emoji}</span>
+            if (stickersArray.length > 0) {
+                const count = stickersArray.length;
+                let sizeClass = "w-18 h-18";
+                if (count === 2) sizeClass = "w-9 h-9";
+                else if (count >= 3 && count <= 4) sizeClass = "w-8 h-8";
+                else if (count > 4) sizeClass = "w-6 h-6";
+
+                stickerRenderHtml = `<div class="flex flex-wrap gap-1 items-center justify-center w-full h-full p-1">`;
+                stickersArray.forEach((stId, idx) => {
+                    let stickerInner = "";
+                    if (customStickers[stId]) {
+                        stickerInner = `<img src="${customStickers[stId]}" class="${sizeClass} object-contain pointer-events-none" />`;
+                    } else if (defaultStickers[stId]) {
+                        stickerInner = `
+                            <div class="relative ${sizeClass} flex items-center justify-center">
+                                <img src="images/${stId}.png" 
+                                     alt="Sticker ${stId}" 
+                                     class="${sizeClass} object-contain pointer-events-none relative z-10" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                />
+                                <div class="hidden absolute inset-0 ${sizeClass} flex flex-col items-center justify-center bg-pink-100 rounded-lg text-lg select-none">
+                                    <span class="text-xs">${defaultStickers[stId].emoji}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    stickerRenderHtml += `
+                        <div class="relative group/sticker cursor-pointer" onclick="event.stopPropagation();" ondblclick="event.stopPropagation(); removeSpecificSticker('${time}', ${idx});">
+                            ${stickerInner}
+                            <!-- 貼紙個別懸停關閉按鈕 -->
+                            <div class="absolute -top-1.5 -right-1.5 bg-rose-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] opacity-0 group-hover/sticker:opacity-100 transition-opacity shadow-sm" onclick="event.stopPropagation(); removeSpecificSticker('${time}', ${idx});">
+                                <i class="fa-solid fa-xmark"></i>
                             </div>
                         </div>
                     `;
-                }
+                });
+                stickerRenderHtml += `</div>`;
             }
 
             const safeId = `box-${time.replace(':', '-')}`;
@@ -632,10 +664,10 @@
                 </div>
             `;
 
-            // 雙擊貼紙重置該欄位
+            // 雙擊貼紙欄空白處重置該欄位所有內容
             const spot = div.querySelector('.sticker-spot');
-            spot.addEventListener('dblclick', function() {
-                if (boardState[time] && boardState[time].stickerId) {
+            spot.addEventListener('dblclick', function(e) {
+                if (e.target === spot && boardState[time]) {
                     clearSingleSlot(time);
                 }
             });
@@ -667,7 +699,7 @@
                     } 
                     // 情況 3：點對點轉移——沒有任何選取狀態，選中此含有貼紙或計畫的時間槽作為來源
                     else {
-                        if (boardState[time] && (boardState[time].stickerId || boardState[time].text)) {
+                        if (boardState[time] && ((boardState[time].stickers && boardState[time].stickers.length > 0) || boardState[time].stickerId || boardState[time].text)) {
                             activeSourceTime = time;
                             // 清除可能存在的右側貼紙選取
                             activeSelectedStickerId = null;
@@ -779,17 +811,42 @@
             autoSaveToStorage();
         }
 
-        // 放置貼紙與文字自動配對邏輯
+        // 放置貼紙與文字自動配對邏輯（已升級為多貼紙陣列操作）
         function placeSticker(time, stickerId) {
             playCuteSound('drop');
             if (!boardState[time]) {
-                boardState[time] = { stickerId: "", text: "" };
+                boardState[time] = { stickers: [], text: "" };
             }
-            boardState[time].stickerId = stickerId;
 
-            // 如果該貼紙在對照表中有對應文字，則自動填入文字框內
+            // 舊格式數據相容處理
+            if (boardState[time].stickerId) {
+                boardState[time].stickers = [boardState[time].stickerId];
+                delete boardState[time].stickerId;
+            }
+            if (!boardState[time].stickers) {
+                boardState[time].stickers = [];
+            }
+
+            // 限制單一时段最高 6 個貼紙，避免排版溢出
+            if (boardState[time].stickers.length >= 6) {
+                showToast("Maximum 6 stickers per timeslot! 🌸", "⚠️");
+                return;
+            }
+
+            boardState[time].stickers.push(stickerId);
+
+            // 如果該貼紙在對照表中有對應文字，則自動寫入/追加到文字備忘錄內
             if (stickerTextMap[stickerId]) {
-                boardState[time].text = stickerTextMap[stickerId];
+                const mapText = stickerTextMap[stickerId];
+                if (!boardState[time].text.trim()) {
+                    boardState[time].text = mapText;
+                } else {
+                    // 如果已含有文字，判斷是否已重複。若不重複則以 & 追加
+                    const currentText = boardState[time].text;
+                    if (!currentText.includes(mapText)) {
+                        boardState[time].text = currentText + " & " + mapText;
+                    }
+                }
             }
 
             renderScheduleSlots();
@@ -797,16 +854,40 @@
             showToast(`Added sticker to ${time}! ✨`, "🌸");
         }
 
+        // 個別貼紙移除功能
+        function removeSpecificSticker(time, index) {
+            playCuteSound('clear');
+            if (boardState[time]) {
+                // 相容舊格式處理
+                if (boardState[time].stickerId) {
+                    boardState[time].stickers = [boardState[time].stickerId];
+                    delete boardState[time].stickerId;
+                }
+                
+                if (boardState[time].stickers) {
+                    boardState[time].stickers.splice(index, 1);
+                    // 如果所有貼紙都移除了且沒有文字，則清除此時段數據
+                    if (boardState[time].stickers.length === 0 && !boardState[time].text.trim()) {
+                        delete boardState[time];
+                    }
+                }
+                
+                renderScheduleSlots();
+                autoSaveToStorage();
+                showToast("Sticker removed! 🧹", "✨");
+            }
+        }
+
         // 修改文字內容
         function updateText(time, val) {
             if (!boardState[time]) {
-                boardState[time] = { stickerId: "", text: "" };
+                boardState[time] = { stickers: [], text: "" };
             }
             boardState[time].text = val;
             autoSaveToStorage();
         }
 
-        // 清除單一欄位
+        // 清除單一欄位（全部內容）
         function clearSingleSlot(time) {
             playCuteSound('clear');
             delete boardState[time];
