@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Magical Daily Timetable 🦄✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@400..700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for cute icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ffe5ec, #fff0f5, #fff9e6, #e8faf4, #eef2ff, #f3e8ff);
+            background-size: 400% 400%;
+            animation: pastelGradient 20s ease infinite;
+        }
+
+        .title-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        @keyframes pastelGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating sparkles */
+        .sparkle {
+            animation: floatSparkle 4s ease-in-out infinite alternate;
+        }
+        @keyframes floatSparkle {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-15px) rotate(15deg) scale(1.2); opacity: 0.3; }
+        }
+
+        /* Kawaii double-lined frame */
+        .magical-border {
+            border: 3px solid #ffb7c5;
+            box-shadow: 0 0 0 4px #fff, 0 10px 25px rgba(255, 183, 197, 0.4);
+        }
+
+        /* Custom star background for task boxes */
+        .star-pattern {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path d='M15 2l2.2 4.5 5 .7-3.6 3.5.9 4.9-4.5-2.4-4.5 2.4.9-4.9-3.6-3.5 5-.7z' fill='%23ffe6ea' opacity='0.65'/></svg>");
+            background-size: 30px 30px;
+        }
+
+        /* Drag over effect for slots */
+        .drag-hover {
+            background-color: #fff0f5 !important;
+            border: 2px dashed #ff94b1 !important;
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(255, 148, 177, 0.3);
+        }
+
+        /* Custom scrollbar for cute look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff4f6;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb7c5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff94b1;
+        }
+
+        /* Floating animation for unicorn */
+        .unicorn-float {
+            animation: unicornFloat 6s ease-in-out infinite;
+        }
+        @keyframes unicornFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Active sticker selection highlight */
+        .active-sticker {
+            border: 3px solid #ff4d88 !important;
+            box-shadow: 0 0 15px rgba(255, 77, 136, 0.6) !important;
+            transform: scale(1.1) rotate(5deg) !important;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1.1) rotate(5deg) translateY(0); }
+            to { transform: scale(1.1) rotate(5deg) translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-4 md:px-8 text-slate-700 relative overflow-x-hidden">
+
+    <!-- Sparkle Stars Background Elements -->
+    <div class="absolute top-10 left-10 text-pink-300 sparkle text-xl pointer-events-none opacity-60"><i class="fa-solid fa-sparkles"></i></div>
+    <div class="absolute top-40 right-20 text-yellow-300 sparkle text-2xl pointer-events-none opacity-60" style="animation-delay: 1s;"><i class="fa-solid fa-star"></i></div>
+    <div class="absolute bottom-20 left-16 text-indigo-300 sparkle text-lg pointer-events-none opacity-60" style="animation-delay: 2s;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+    <div class="absolute bottom-40 right-12 text-teal-300 sparkle text-xl pointer-events-none opacity-60" style="animation-delay: 1.5s;"><i class="fa-solid fa-cloud"></i></div>
+
+    <div class="max-w-6xl mx-auto bg-white/75 backdrop-blur-md rounded-[32px] p-6 md:p-8 magical-border relative">
+        
+        <!-- TOP CORNER DECORATIONS -->
+        <div class="absolute top-3 left-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
+        <div class="absolute top-3 right-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
+
+        <!-- HEADER SECTION -->
+        <header class="relative mb-8 text-center flex flex-col items-center justify-center pt-4 pb-2">
+            
+            <!-- Rainbow Arch SVG Background -->
+            <div class="absolute -top-6 w-full max-w-lg h-32 opacity-80 pointer-events-none -z-10">
+                <svg viewBox="0 0 500 150" class="w-full h-full">
+                    <path d="M 50,150 A 200,200 0 0,1 450,150" fill="none" stroke="#ffe5ec" stroke-width="24" />
+                    <path d="M 70,150 A 180,180 0 0,1 430,150" fill="none" stroke="#fff0f5" stroke-width="20" />
+                    <path d="M 90,150 A 160,160 0 0,1 410,150" fill="none" stroke="#fff9e6" stroke-width="16" />
+                    <path d="M 110,150 A 140,140 0 0,1 390,150" fill="none" stroke="#e8faf4" stroke-width="12" />
+                    <path d="M 130,150 A 120,120 0 0,1 370,150" fill="none" stroke="#eef2ff" stroke-width="8" />
+                </svg>
+            </div>
+
+            <!-- Title Layout -->
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-center gap-4">
+                
+                <div class="text-left text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 bg-pink-100 text-pink-500 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-sparkles animate-pulse"></i> Whimsical Daily Planner
+                    </div>
+                    <h1 class="title-font text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-indigo-500 drop-shadow-sm">
+                        MY MAGICAL DAILY TIMETABLE
+                    </h1>
+                    <p class="text-sm text-slate-500 italic mt-1 font-medium">Design your magical day! Drag or tap stickers onto timeslots! ✨🦄</p>
+                </div>
+
+                <!-- Cute Unicorn on a Cloud -->
+                <div class="unicorn-float relative w-28 h-28 flex items-center justify-center">
+                    <!-- SVG cloud at the bottom of unicorn -->
+                    <svg class="absolute bottom-0 w-24 h-10 text-white fill-current filter drop-shadow-sm" viewBox="0 0 100 40">
+                        <path d="M10 30 Q 15 15, 30 20 Q 45 10, 60 20 Q 75 10, 85 25 Q 95 30, 90 35 L 10 35 Z" />
+                        <circle cx="20" cy="28" r="8" />
+                        <circle cx="45" cy="20" r="10" />
+                        <circle cx="70" cy="24" r="9" />
+                    </svg>
+                    <!-- Simple Cute Unicorn SVG -->
+                    <svg class="absolute bottom-4 w-16 h-18" viewBox="0 0 64 64">
+                        <!-- Head -->
+                        <path d="M15 35 C 10 25, 25 15, 38 20 C 45 23, 48 30, 48 38 C 48 48, 25 50, 15 42 Z" fill="#ffffff" stroke="#ffcbd5" stroke-width="2"/>
+                        <!-- Muzzle -->
+                        <path d="M15 35 C 12 33, 14 26, 22 24 C 26 23, 27 28, 25 32 Z" fill="#ffe5ec" />
+                        <circle cx="19" cy="28" r="1" fill="#ff4d88" /> <!-- Nostril -->
+                        <!-- Eye -->
+                        <path d="M30 28 Q 32 25, 34 28" stroke="#ff4d88" stroke-width="2" fill="none" stroke-linecap="round"/> <!-- Sleepy eye -->
+                        <!-- Horn -->
+                        <polygon points="38,20 45,5 34,16" fill="#ffe66d" stroke="#f4d35e" stroke-width="1" />
+                        <!-- Ears -->
+                        <path d="M28 18 C 28 12, 32 12, 32 18 Z" fill="#ffffff" stroke="#ffcbd5" stroke-width="1.5" />
+                        <path d="M29 17 C 29 14, 31 14, 31 17 Z" fill="#ffe5ec" />
+                        <!-- Mane -->
+                        <path d="M38 18 C 42 12, 48 15, 52 24 C 54 28, 50 32, 45 30" fill="#c3ecf7" />
+                        <path d="M43 25 C 47 22, 52 26, 54 34 C 55 38, 50 40, 46 36" fill="#ffcbd5" />
+                        <path d="M44 32 C 48 30, 52 34, 53 40 C 53 44, 48 44, 44 40" fill="#fff5b2" />
+                        <!-- Cute blush -->
+                        <ellipse cx="29" cy="34" rx="4" ry="2" fill="#ffb7c5" opacity="0.6" />
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- ACTION BUTTONS BAR -->
+        <div class="flex flex-wrap justify-center gap-3 mb-6">
+            <button onclick="clearAllSlots()" class="px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95">
+                <i class="fa-solid fa-trash-can"></i> Reset Board
+            </button>
+            <button onclick="saveTimetable()" class="px-4 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95">
+                <i class="fa-solid fa-floppy-disk"></i> Save Schedule
+            </button>
+            <button onclick="exportToImage()" class="px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95">
+                <i class="fa-solid fa-file-image"></i> Print / Download
+            </button>
+            <button onclick="toggleAudio()" id="audioBtn" class="px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95">
+                <i id="audioIcon" class="fa-solid fa-volume-high"></i> Magic Sounds: On
+            </button>
+        </div>
+
+        <!-- MAIN LAYOUT GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+            
+            <!-- LEFT AREA: THE TIMETABLE (COLUMNS 1 & 2) -->
+            <div id="print-area" class="lg:col-span-3 bg-white/90 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-dashed border-pink-100 star-pattern">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                    
+                    <!-- LEFT COLUMN: Morning to Afternoon (08:00 - 14:00) -->
+                    <div>
+                        <h3 class="title-font text-lg font-bold text-sky-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-sky-100 pb-2">
+                            <i class="fa-solid fa-sun-cloud text-yellow-400 animate-pulse"></i> Morning & Afternoon
+                        </h3>
+                        <div class="space-y-4" id="morning-slots">
+                            <!-- JS will inject slots 08:00 - 14:00 -->
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Afternoon to Evening (15:00 - 22:00) -->
+                    <div class="mt-6 md:mt-0">
+                        <h3 class="title-font text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-indigo-100 pb-2">
+                            <i class="fa-solid fa-moon-stars text-indigo-300"></i> Afternoon & Night
+                        </h3>
+                        <div class="space-y-4" id="evening-slots">
+                            <!-- JS will inject slots 15:00 - 22:00 -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RIGHT AREA: STICKER DRAWER & CONTROLS -->
+            <div class="lg:col-span-1 space-y-6">
+                
+                <!-- STICKER DRAWER PANEL -->
+                <div class="bg-gradient-to-b from-pink-50 to-purple-50 rounded-2xl p-5 border-2 border-pink-200 shadow-sm relative">
+                    
+                    <h3 class="title-font text-lg font-bold text-pink-500 mb-2 flex items-center gap-2 border-b border-pink-200 pb-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Magic Stickers
+                    </h3>
+                    
+                    <p class="text-xs text-slate-500 mb-4 leading-relaxed bg-white/70 p-2 rounded-lg border border-pink-100">
+                        ✨ <b>Drag</b> any sticker directly to a schedule slot, OR <b>Tap</b> a sticker below and then <b>Tap</b> your desired time slot!
+                    </p>
+
+                    <!-- Sticker Grid -->
+                    <div class="grid grid-cols-3 gap-3" id="stickers-container">
+                        <!-- JS Injecting 10 Stickers (001 - 010) -->
+                    </div>
+
+                    <!-- Help banner inside Drawer -->
+                    <div class="mt-4 pt-3 border-t border-dashed border-pink-200 text-center text-xs text-pink-400 font-semibold animate-pulse">
+                        <i class="fa-solid fa-sparkles"></i> Double tap any slot sticker to remove it!
+                    </div>
+                </div>
+
+                <!-- PNG STICKER MANAGER (Allows upload of 001.png - 010.png) -->
+                <div class="bg-white/80 rounded-2xl p-5 border-2 border-sky-100 shadow-sm">
+                    <h4 class="title-font text-sm font-bold text-sky-500 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-image"></i> Custom Sticker Upload
+                    </h4>
+                    <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+                        Have your own files? Upload pictures (001.png to 010.png) to replace default stickers:
+                    </p>
+                    
+                    <div class="space-y-2">
+                        <label class="flex flex-col items-center justify-center border-2 border-dashed border-sky-200 rounded-xl p-3 bg-sky-50/50 cursor-pointer hover:bg-sky-50 transition-all group">
+                            <i class="fa-solid fa-cloud-arrow-up text-sky-400 text-xl group-hover:scale-110 transition-transform"></i>
+                            <span class="text-xs font-semibold text-sky-600 mt-1">Upload PNG Stickers</span>
+                            <span class="text-[10px] text-slate-400">Accepts files 001 - 010</span>
+                            <input type="file" class="hidden" id="png-uploader" multiple accept="image/png, image/jpeg">
+                        </label>
+                        
+                        <div id="upload-status" class="text-[11px] font-medium text-emerald-600 hidden text-center bg-emerald-50 py-1 rounded">
+                            <i class="fa-solid fa-circle-check"></i> Custom stickers loaded!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER INFO -->
+        <footer class="mt-8 text-center text-slate-400 text-xs flex flex-col items-center justify-center gap-1 border-t border-pink-100/50 pt-4">
+            <p>Made with ✨ magic and love for little stars. ✨</p>
+            <p>© 2026 My Magical Daily Timetable. Sparkle on!</p>
+        </footer>
+
+    </div>
+
+    <!-- NOTIFICATION SYSTEM MODAL -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
+        <span id="toast-icon">✨</span>
+        <span id="toast-message">Board Reset Successful!</span>
+    </div>
+
+    <!-- PREVIEW/PRINT MODAL -->
+    <div id="print-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative magical-border max-h-[90vh] overflow-y-auto">
+            <button onclick="closePrintModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <h3 class="title-font text-2xl font-bold text-pink-500 mb-2 text-center">✨ Your Magical Timetable Ready! ✨</h3>
+            <p class="text-xs text-slate-500 text-center mb-6">Use your browser print utility to save as PDF or Print beautifully on paper!</p>
+            
+            <div id="print-preview-container" class="border rounded-2xl p-4 bg-white shadow-inner overflow-hidden">
+                <!-- Preview injected here -->
+            </div>
+
+            <div class="mt-6 flex justify-center gap-3">
+                <button onclick="closePrintModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-full text-sm transition-all">
+                    Cancel
+                </button>
+                <button onclick="triggerActualPrint()" class="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-indigo-500 hover:from-pink-600 hover:to-indigo-600 text-white font-bold rounded-full text-sm shadow-md transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> Launch Print Dialog
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Predefined Default High-Quality SVGs for stickers 001 - 010
+        const defaultStickers = {
+            "001": {
+                name: "001 Magic Book",
+                emoji: "📚",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <rect x="12" y="16" width="40" height="34" rx="4" fill="#a582e2" stroke="#794fca" stroke-width="2"/>
+                        <path d="M12 46 C16 46, 20 48, 32 48 C44 48, 48 46, 52 46 C52 48, 44 52, 32 52 C20 52, 16 48, 12 46 Z" fill="#ffe5ec" stroke="#794fca" stroke-width="2"/>
+                        <path d="M16 20 L16 42 C20 42, 28 44, 32 44 L32 20 C28 20, 20 20, 16 20 Z" fill="#ffffff" />
+                        <path d="M48 20 L48 42 C44 42, 36 44, 32 44 L32 20 C36 20, 44 20, 48 20 Z" fill="#ffffff" />
+                        <circle cx="32" cy="16" r="3" fill="#ffe66d"/>
+                        <polygon points="32,24 35,31 42,31 36,35 38,42 32,38 26,42 28,35 22,31 29,31" fill="#ffe66d" />
+                      </svg>`
+            },
+            "002": {
+                name: "002 Star Wand",
+                emoji: "🪄",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <rect x="29" y="24" width="6" height="32" rx="3" fill="#cf71a9" />
+                        <line x1="32" y1="24" x2="32" y2="56" stroke="#b24385" stroke-width="2" stroke-linecap="round"/>
+                        <polygon points="32,6 36,15 46,15 38,21 41,30 32,25 23,30 26,21 18,15 28,15" fill="#ffd166" stroke="#e9c46a" stroke-width="2" />
+                        <circle cx="32" cy="18" r="1.5" fill="#ffffff" />
+                        <circle cx="20" cy="35" r="2" fill="#a582e2" />
+                        <circle cx="44" cy="22" r="1.5" fill="#a582e2" />
+                      </svg>`
+            },
+            "003": {
+                name: "003 Sweet Cupcake",
+                emoji: "🧁",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <!-- Cup Wrapper -->
+                        <polygon points="16,36 48,36 42,56 22,56" fill="#70d6ff" stroke="#48cae4" stroke-width="2" stroke-linejoin="round" />
+                        <line x1="26" y1="36" x2="28" y2="56" stroke="#48cae4" stroke-width="1.5" />
+                        <line x1="32" y1="36" x2="32" y2="56" stroke="#48cae4" stroke-width="1.5" />
+                        <line x1="38" y1="36" x2="36" y2="56" stroke="#48cae4" stroke-width="1.5" />
+                        <!-- Cake frosting -->
+                        <path d="M12 36 Q 16 22, 32 22 Q 48 22, 52 36 Z" fill="#ffb7c5" />
+                        <path d="M18 30 Q 32 12, 46 30 Z" fill="#ffccd5" />
+                        <!-- Cherry on top -->
+                        <circle cx="32" cy="14" r="5" fill="#ff4d6d" />
+                        <path d="M32 9 Q 36 2, 42 4" stroke="#ff4d6d" stroke-width="1.5" fill="none" />
+                        <!-- Sprinkles -->
+                        <rect x="22" y="26" width="3" height="1.5" rx="0.5" fill="#ffe66d" transform="rotate(20)" />
+                        <rect x="36" y="24" width="3" height="1.5" rx="0.5" fill="#70d6ff" transform="rotate(-15)" />
+                        <rect x="42" y="28" width="3" height="1.5" rx="0.5" fill="#a582e2" transform="rotate(45)" />
+                      </svg>`
+            },
+            "004": {
+                name: "004 Toy Dino",
+                emoji: "🦕",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <path d="M48 26 C 48 18, 42 12, 36 12 C 30 12, 28 16, 26 22 C 24 28, 14 30, 10 34 C 6 38, 8 46, 16 46 C 24 46, 26 44, 30 46 C 34 48, 40 48, 44 44 C 48 40, 48 32, 48 26 Z" fill="#99e2b4" stroke="#67b99a" stroke-width="2"/>
+                        <circle cx="36" cy="18" r="2" fill="#2d3748" />
+                        <circle cx="40" cy="18" r="1" fill="#ffffff" />
+                        <!-- Blush -->
+                        <ellipse cx="36" cy="21" rx="2" ry="1" fill="#ffb7c5" />
+                        <!-- Spikes -->
+                        <polygon points="26,14 28,11 30,14" fill="#ffcbd5" />
+                        <polygon points="31,12 33,9 35,12" fill="#ffcbd5" />
+                        <polygon points="16,46 14,54 18,54" fill="#99e2b4" />
+                        <polygon points="24,46 22,54 26,54" fill="#99e2b4" />
+                        <polygon points="34,46 32,54 36,54" fill="#99e2b4" />
+                      </svg>`
+            },
+            "005": {
+                name: "005 Rainbow Cloud",
+                emoji: "🌈",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <!-- Rainbow backdrop -->
+                        <path d="M 14,42 A 18,18 0 0,1 50,42" fill="none" stroke="#ffb7c5" stroke-width="4"/>
+                        <path d="M 18,42 A 14,14 0 0,1 46,42" fill="none" stroke="#ffd166" stroke-width="4"/>
+                        <path d="M 22,42 A 10,10 0 0,1 42,42" fill="none" stroke="#06d6a0" stroke-width="4"/>
+                        <!-- Cloud overlay -->
+                        <path d="M12 44 Q 10 32, 22 34 Q 32 24, 42 34 Q 52 32, 50 44 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+                        <circle cx="18" cy="42" r="6" fill="#ffffff" />
+                        <circle cx="44" cy="42" r="6" fill="#ffffff" />
+                        <!-- Sparkles -->
+                        <polygon points="50,15 52,20 57,20 53,23 55,28 50,25 45,28 47,23 43,20 48,20" fill="#ffd166" />
+                      </svg>`
+            },
+            "006": {
+                name: "006 Shiny Star",
+                emoji: "⭐",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <polygon points="32,6 39,21 56,21 42,31 47,48 32,38 17,48 22,31 8,21 25,21" fill="#ffe66d" stroke="#f4d35e" stroke-width="3" stroke-linejoin="round" />
+                        <circle cx="25" cy="27" r="2" fill="#2d3748" />
+                        <circle cx="39" cy="27" r="2" fill="#2d3748" />
+                        <ellipse cx="21" cy="30" rx="3" ry="1.5" fill="#ffb7c5" />
+                        <ellipse cx="43" cy="30" rx="3" ry="1.5" fill="#ffb7c5" />
+                        <path d="M 30,32 Q 32,35 34,32" stroke="#2d3748" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                      </svg>`
+            },
+            "007": {
+                name: "007 Magic Orb",
+                emoji: "🔮",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <ellipse cx="32" cy="52" rx="16" ry="6" fill="#90e0ef" stroke="#0077b6" stroke-width="2" />
+                        <polygon points="20,44 44,44 38,54 26,54" fill="#0077b6" />
+                        <circle cx="32" cy="28" r="20" fill="#a582e2" stroke="#794fca" stroke-width="2" />
+                        <circle cx="32" cy="28" r="20" fill="url(#orb-grad)" opacity="0.8" />
+                        <!-- Sparkles inside -->
+                        <polygon points="26,20 28,24 32,24 29,26 30,30 26,28 22,30 23,26 20,24 24,24" fill="#ffffff" />
+                        <circle cx="42" cy="22" r="3" fill="#ffffff" opacity="0.6" />
+                        <circle cx="38" cy="36" r="1.5" fill="#ffffff" opacity="0.6" />
+                        <defs>
+                          <radialGradient id="orb-grad" cx="30%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="50%" stop-color="#e8cbf5"/>
+                            <stop offset="100%" stop-color="#794fca"/>
+                          </radialGradient>
+                        </defs>
+                      </svg>`
+            },
+            "008": {
+                name: "008 Lucky Cat",
+                emoji: "🐱",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <circle cx="32" cy="36" r="18" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+                        <!-- Ears -->
+                        <polygon points="16,24 20,10 28,21" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+                        <polygon points="19,21 21,13 26,19" fill="#ffcbd5" />
+                        <polygon points="48,24 44,10 36,21" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" />
+                        <polygon points="45,21 43,13 38,19" fill="#ffcbd5" />
+                        <!-- Eyes -->
+                        <circle cx="26" cy="32" r="2" fill="#2d3748" />
+                        <circle cx="38" cy="32" r="2" fill="#2d3748" />
+                        <circle cx="25" cy="31" r="0.7" fill="#ffffff" />
+                        <circle cx="37" cy="31" r="0.7" fill="#ffffff" />
+                        <!-- Nose/Mouth -->
+                        <path d="M30 36 Q 32 38, 34 36" stroke="#2d3748" stroke-width="1.5" fill="none" />
+                        <ellipse cx="21" cy="35" rx="3" ry="1.5" fill="#ffb7c5" opacity="0.8" />
+                        <ellipse cx="43" cy="35" rx="3" ry="1.5" fill="#ffb7c5" opacity="0.8" />
+                        <!-- Whiskers -->
+                        <line x1="12" y1="34" x2="18" y2="34" stroke="#cbd5e1" stroke-width="1.5" />
+                        <line x1="12" y1="38" x2="17" y2="37" stroke="#cbd5e1" stroke-width="1.5" />
+                        <line x1="52" y1="34" x2="46" y2="34" stroke="#cbd5e1" stroke-width="1.5" />
+                        <line x1="52" y1="38" x2="47" y2="37" stroke="#cbd5e1" stroke-width="1.5" />
+                      </svg>`
+            },
+            "009": {
+                name: "009 Magic Music",
+                emoji: "🎵",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <!-- Left note head -->
+                        <ellipse cx="22" cy="46" rx="6" ry="4" fill="#a582e2" transform="rotate(-10, 22, 46)" />
+                        <!-- Right note head -->
+                        <ellipse cx="46" cy="40" rx="6" ry="4" fill="#a582e2" transform="rotate(-10, 46, 40)" />
+                        <!-- Stems -->
+                        <rect x="26" y="20" width="3" height="26" fill="#a582e2" />
+                        <rect x="50" y="14" width="3" height="26" fill="#a582e2" />
+                        <!-- Beam -->
+                        <polygon points="26,20 53,14 53,19 26,25" fill="#a582e2" />
+                        <!-- Tiny sparkle stars -->
+                        <polygon points="14,20 16,24 20,24 17,26 18,30 14,28 10,30 11,26 8,24 12,24" fill="#ffd166" />
+                        <polygon points="46,48 48,51 52,51 49,53 50,57 46,55 42,57 43,53 40,51 44,51" fill="#ffe5ec" />
+                      </svg>`
+            },
+            "010": {
+                name: "010 Sleepy Moon",
+                emoji: "🌙",
+                svg: `<svg viewBox="0 0 64 64" class="w-full h-full">
+                        <path d="M46 44 C 30 46, 18 34, 20 18 C 11 22, 12 36, 22 42 C 32 48, 42 48, 46 44 Z" fill="#fff3b0" stroke="#f4d35e" stroke-width="2" />
+                        <circle cx="28" cy="32" r="1.5" fill="#2d3748" />
+                        <path d="M26 36 Q 28 38, 30 36" stroke="#2d3748" stroke-width="1" fill="none" />
+                        <!-- Sleep cap -->
+                        <polygon points="20,18 24,12 16,14" fill="#a582e2" />
+                        <circle cx="16" cy="14" r="2" fill="#ffffff" />
+                        <!-- Mini stars around -->
+                        <polygon points="48,16 50,19 54,19 51,21 52,25 48,23 44,25 45,21 42,19 46,19" fill="#e8f0fe" />
+                        <polygon points="36,44 38,46 41,46 39,48 40,51 36,49 32,51 33,48 31,46 34,46" fill="#e8f0fe" />
+                      </svg>`
+            }
+        };
+
+        // Slots definitions
+        const morningSlotsDef = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
+        const eveningSlotsDef = ["15:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"]; // 16:00 is skipped as specified
+
+        // App state
+        let boardState = {}; // { "08:00": { stickerId: "001", text: "Math class" } }
+        let customStickers = {}; // Store uploaded base64 data for "001" - "010"
+        let activeSelectedStickerId = null; // For mobile tap-to-place flow
+        let audioEnabled = true;
+
+        // Audio synthesizer using Web Audio API for cute game-like sound effects
+        let audioCtx = null;
+        function playCuteSound(type) {
+            if (!audioEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                const now = audioCtx.currentTime;
+                
+                if (type === 'select') {
+                    // Quick short pop sound
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } 
+                else if (type === 'drop') {
+                    // Magical chime sound
+                    let osc1 = audioCtx.createOscillator();
+                    let osc2 = audioCtx.createOscillator();
+                    let gain1 = audioCtx.createGain();
+                    let gain2 = audioCtx.createGain();
+
+                    osc1.type = 'triangle';
+                    osc1.frequency.setValueAtTime(523.25, now); // C5
+                    osc1.frequency.exponentialRampToValueAtTime(1046.50, now + 0.3); // C6
+                    gain1.gain.setValueAtTime(0.1, now);
+                    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(659.25, now + 0.05); // E5
+                    osc2.frequency.exponentialRampToValueAtTime(1318.51, now + 0.35); // E6
+                    gain2.gain.setValueAtTime(0.08, now + 0.05);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+                    osc1.connect(gain1);
+                    gain1.connect(audioCtx.destination);
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+
+                    osc1.start(now);
+                    osc1.stop(now + 0.35);
+                    osc2.start(now + 0.05);
+                    osc2.stop(now + 0.35);
+                } 
+                else if (type === 'clear') {
+                    // Whimsical swoosh sound descending
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.25);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.26);
+                }
+            } catch (e) {
+                console.log("Audio not allowed or blocked by browser policy until interaction.", e);
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById("audioBtn");
+            const icon = document.getElementById("audioIcon");
+            if (audioEnabled) {
+                btn.className = "px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95";
+                btn.innerHTML = `<i id="audioIcon" class="fa-solid fa-volume-high"></i> Magic Sounds: On`;
+            } else {
+                btn.className = "px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95";
+                btn.innerHTML = `<i id="audioIcon" class="fa-solid fa-volume-xmark"></i> Magic Sounds: Off`;
+            }
+            showToast("Audio toggled!", "✨");
+        }
+
+        // Initialize elements on Window Load
+        window.onload = function() {
+            loadFromStorage();
+            renderStickerDrawer();
+            renderScheduleSlots();
+            setupDragAndDrop();
+            setupPngUploader();
+        };
+
+        // Render stickers to drawer
+        function renderStickerDrawer() {
+            const container = document.getElementById("stickers-container");
+            container.innerHTML = "";
+            
+            Object.keys(defaultStickers).sort().forEach(id => {
+                const item = defaultStickers[id];
+                const stickerDiv = document.createElement("div");
+                stickerDiv.className = "bg-white p-2 rounded-xl border border-pink-100 shadow-sm cursor-pointer hover:-translate-y-1 hover:shadow-md hover:border-pink-300 active:scale-95 transition-all duration-200 relative group flex flex-col items-center select-none";
+                stickerDiv.id = `drawer-sticker-${id}`;
+                stickerDiv.setAttribute("draggable", "true");
+                stickerDiv.setAttribute("data-sticker-id", id);
+                
+                // Content of sticker
+                let stickerGraphics = "";
+                if (customStickers[id]) {
+                    stickerGraphics = `<img src="${customStickers[id]}" class="w-12 h-12 object-contain pointer-events-none" />`;
+                } else {
+                    stickerGraphics = `<div class="w-12 h-12 pointer-events-none flex items-center justify-center">${item.svg}</div>`;
+                }
+
+                stickerDiv.innerHTML = `
+                    ${stickerGraphics}
+                    <span class="text-[10px] font-bold text-slate-400 mt-1">${id}</span>
+                `;
+
+                // Deskstop drag events
+                stickerDiv.addEventListener("dragstart", function(e) {
+                    playCuteSound('select');
+                    e.dataTransfer.setData("text/plain", id);
+                    stickerDiv.classList.add("opacity-50");
+                });
+
+                stickerDiv.addEventListener("dragend", function() {
+                    stickerDiv.classList.remove("opacity-50");
+                });
+
+                // Mobile/Click Tap Selector event
+                stickerDiv.addEventListener("click", function() {
+                    playCuteSound('select');
+                    selectStickerForTap(id);
+                });
+
+                container.appendChild(stickerDiv);
+            });
+        }
+
+        // Handle Mobile/Tap-to-place active state
+        function selectStickerForTap(id) {
+            // Remove previous active classes
+            document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
+                el.classList.remove("active-sticker");
+            });
+
+            if (activeSelectedStickerId === id) {
+                // Deselect if already selected
+                activeSelectedStickerId = null;
+            } else {
+                activeSelectedStickerId = id;
+                const activeEl = document.getElementById(`drawer-sticker-${id}`);
+                if (activeEl) {
+                    activeEl.classList.add("active-sticker");
+                }
+                showToast(`Sticker ${id} selected! Tap any schedule box to place.`, "⭐");
+            }
+        }
+
+        // Render the timeslots
+        function renderScheduleSlots() {
+            const morningContainer = document.getElementById("morning-slots");
+            const eveningContainer = document.getElementById("evening-slots");
+            
+            morningContainer.innerHTML = "";
+            eveningContainer.innerHTML = "";
+
+            // Inject Morning Slots
+            morningSlotsDef.forEach(time => {
+                morningContainer.appendChild(createSlotElement(time));
+            });
+
+            // Inject Evening Slots
+            eveningSlotsDef.forEach(time => {
+                eveningContainer.appendChild(createSlotElement(time));
+            });
+        }
+
+        // Helper to construct interactive Slot HTML
+        function createSlotElement(time) {
+            const div = document.createElement("div");
+            div.className = "flex items-center gap-3 transition-all duration-300 group";
+            div.setAttribute("data-time", time);
+
+            const hasItem = boardState[time];
+            const textVal = hasItem ? hasItem.text : "";
+            const stickerId = hasItem ? hasItem.stickerId : null;
+
+            // Generate content inside writing area
+            let stickerRenderHtml = "";
+            if (stickerId) {
+                if (customStickers[stickerId]) {
+                    stickerRenderHtml = `<img src="${customStickers[stickerId]}" class="w-10 h-10 object-contain animate-bounce pointer-events-none" />`;
+                } else if (defaultStickers[stickerId]) {
+                    stickerRenderHtml = `<div class="w-10 h-10 animate-bounce pointer-events-none">${defaultStickers[stickerId].svg}</div>`;
+                }
+            }
+
+            // Create a safe, non-colon ID identifier for CSS selector queries
+            const safeId = `box-${time.replace(':', '-')}`;
+
+            div.innerHTML = `
+                <!-- Cloud Hour Badge -->
+                <div class="relative w-18 h-12 flex-shrink-0 flex items-center justify-center filter drop-shadow-[0_2px_4px_rgba(255,183,197,0.25)] hover:scale-105 transition-transform duration-200">
+                    <!-- Kawaii Cloud SVG shape -->
+                    <svg class="absolute inset-0 w-full h-full fill-current text-[#fff4f6] stroke-[#ffcbd5] stroke-2" viewBox="0 0 100 60" preserveAspectRatio="none">
+                        <path d="M 20,45 
+                                 A 15,15 0 0,1 15,20 
+                                 A 18,18 0 0,1 45,10 
+                                 A 18,18 0 0,1 80,18 
+                                 A 15,15 0 0,1 85,45 
+                                 Z" />
+                    </svg>
+                    <!-- Hour Text -->
+                    <span class="relative z-10 title-font text-xs font-bold text-pink-500 tracking-tight">${time}</span>
+                </div>
+
+                <!-- Rounded Writing Box -->
+                <div class="writing-box flex-grow min-h-[56px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
+                     id="${safeId}" 
+                     data-time="${time}">
+                    
+                    <!-- Star-pattern inside the box -->
+                    <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
+
+                    <!-- Sticker Place Spot -->
+                    <div class="sticker-spot w-12 h-12 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
+                        ${stickerRenderHtml ? stickerRenderHtml : `
+                            <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
+                                <i class="fa-solid fa-wand-magic text-xs animate-pulse"></i>
+                                <span>stick</span>
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- Custom Notes input -->
+                    <input type="text" 
+                           value="${textVal}" 
+                           placeholder="Type magical plans here..." 
+                           class="relative z-10 flex-grow bg-transparent border-none outline-none text-sm font-semibold text-slate-700 placeholder-slate-400 focus:placeholder-pink-300 transition-colors w-full"
+                           onchange="updateText('${time}', this.value)"
+                           onkeydown="if(event.key === 'Enter') this.blur();"
+                    />
+
+                    <!-- Clear Slot Action Button -->
+                    ${hasItem ? `
+                        <button onclick="clearSingleSlot('${time}')" class="relative z-10 text-rose-300 hover:text-rose-500 hover:scale-110 active:scale-95 transition-all text-xs p-1 bg-rose-50 rounded-full w-5 h-5 flex items-center justify-center border border-rose-100 shadow-sm" title="Clear this slot">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    ` : ''}
+
+                </div>
+            `;
+
+            // Double click on sticker spot to clear it
+            const spot = div.querySelector('.sticker-spot');
+            spot.addEventListener('dblclick', function() {
+                if (boardState[time] && boardState[time].stickerId) {
+                    clearSingleSlot(time);
+                }
+            });
+
+            // Tap/Click handler for mobile/desktop placement click (selected via class name to avoid selector issues)
+            const writingBox = div.querySelector('.writing-box');
+            writingBox.addEventListener('click', function(e) {
+                // Ensure the click didn't come from input typing or clear button
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                    if (activeSelectedStickerId) {
+                        placeSticker(time, activeSelectedStickerId);
+                        // Clear selection glow
+                        document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
+                            el.classList.remove("active-sticker");
+                        });
+                        activeSelectedStickerId = null;
+                    }
+                }
+            });
+
+            return div;
+        }
+
+        // Drop & Drag Native Events Binding
+        function setupDragAndDrop() {
+            // Dragover to allow drop
+            document.addEventListener("dragover", function(e) {
+                e.preventDefault();
+            });
+
+            // Add listener to target drop areas
+            document.addEventListener("dragenter", function(e) {
+                const dropBox = e.target.closest(".writing-box");
+                if (dropBox) {
+                    dropBox.classList.add("drag-hover");
+                }
+            });
+
+            document.addEventListener("dragleave", function(e) {
+                const dropBox = e.target.closest(".writing-box");
+                if (dropBox) {
+                    dropBox.classList.remove("drag-hover");
+                }
+            });
+
+            document.addEventListener("drop", function(e) {
+                e.preventDefault();
+                const dropBox = e.target.closest(".writing-box");
+                if (dropBox) {
+                    dropBox.classList.remove("drag-hover");
+                    const time = dropBox.getAttribute("data-time");
+                    const stickerId = e.dataTransfer.getData("text/plain");
+                    if (stickerId && defaultStickers[stickerId]) {
+                        placeSticker(time, stickerId);
+                    }
+                }
+            });
+        }
+
+        // Place sticker logic
+        function placeSticker(time, stickerId) {
+            playCuteSound('drop');
+            if (!boardState[time]) {
+                boardState[time] = { stickerId: "", text: "" };
+            }
+            boardState[time].stickerId = stickerId;
+            renderScheduleSlots();
+            autoSaveToStorage();
+            showToast(`Added sticker to ${time}! ✨`, "🌸");
+        }
+
+        // Update text logic
+        function updateText(time, val) {
+            if (!boardState[time]) {
+                boardState[time] = { stickerId: "", text: "" };
+            }
+            boardState[time].text = val;
+            autoSaveToStorage();
+        }
+
+        // Clear a single slot
+        function clearSingleSlot(time) {
+            playCuteSound('clear');
+            delete boardState[time];
+            renderScheduleSlots();
+            autoSaveToStorage();
+            showToast(`Slot ${time} cleared!`, "🧹");
+        }
+
+        // Clear all slots on the board
+        function clearAllSlots() {
+            playCuteSound('clear');
+            boardState = {};
+            renderScheduleSlots();
+            autoSaveToStorage();
+            showToast("Timetable board reset completely!", "🧹");
+        }
+
+        // Storage Management
+        function autoSaveToStorage() {
+            localStorage.setItem("magical_timetable_state", JSON.stringify(boardState));
+        }
+
+        function saveTimetable() {
+            autoSaveToStorage();
+            playCuteSound('drop');
+            showToast("Progress saved to your browser! 🦄✨", "💖");
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem("magical_timetable_state");
+            if (saved) {
+                try {
+                    boardState = JSON.parse(saved);
+                } catch (e) {
+                    boardState = {};
+                }
+            }
+            const savedCustoms = localStorage.getItem("magical_custom_stickers");
+            if (savedCustoms) {
+                try {
+                    customStickers = JSON.parse(savedCustoms);
+                } catch (e) {
+                    customStickers = {};
+                }
+            }
+        }
+
+        // Setup Custom PNG Uploader
+        function setupPngUploader() {
+            const fileInput = document.getElementById("png-uploader");
+            const statusIndicator = document.getElementById("upload-status");
+
+            fileInput.addEventListener("change", function(e) {
+                const files = e.target.files;
+                if (!files.length) return;
+
+                let loadCount = 0;
+                Array.from(files).forEach(file => {
+                    // Extract sticker slot number from filename, e.g. "001.png" -> "001"
+                    const name = file.name;
+                    const match = name.match(/0*(10|[1-9])/); // finds 1-10 inside filename
+                    let stickerId = "";
+                    
+                    if (match) {
+                        let parsedId = parseInt(match[0], 10);
+                        if (parsedId >= 1 && parsedId <= 10) {
+                            stickerId = String(parsedId).padStart(3, '0');
+                        }
+                    }
+
+                    // Fallback to sequential slot placement if name pattern doesn't match
+                    if (!stickerId) {
+                        // Let's find first empty custom sticker, or cycle through slots
+                        stickerId = String((loadCount % 10) + 1).padStart(3, '0');
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        customStickers[stickerId] = evt.target.result;
+                        loadCount++;
+                        
+                        if (loadCount === files.length) {
+                            localStorage.setItem("magical_custom_stickers", JSON.stringify(customStickers));
+                            renderStickerDrawer();
+                            renderScheduleSlots();
+                            statusIndicator.classList.remove("hidden");
+                            statusIndicator.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${loadCount} custom stickers updated!`;
+                            playCuteSound('drop');
+                            showToast("Custom stickers processed! 🎨", "✨");
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Cute Toast System
+        function showToast(message, icon = "✨") {
+            const toast = document.getElementById("toast");
+            const toastMessage = document.getElementById("toast-message");
+            const toastIcon = document.getElementById("toast-icon");
+
+            toastIcon.innerText = icon;
+            toastMessage.innerText = message;
+            
+            toast.className = "fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-0 opacity-100 transition-all duration-300 flex items-center gap-2 font-medium text-sm";
+            
+            setTimeout(() => {
+                toast.className = "fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 font-medium text-sm";
+            }, 3000);
+        }
+
+        // Print & Export Layout Builder
+        function exportToImage() {
+            playCuteSound('drop');
+            const previewContainer = document.getElementById("print-preview-container");
+            const srcBoard = document.getElementById("print-area");
+            
+            // Clone the timetable board into clean, style-compatible structure for printing
+            const clone = srcBoard.cloneNode(true);
+            
+            // Clean up editable fields by matching their text content so it shows up beautifully in static print
+            const originalInputs = srcBoard.querySelectorAll('input');
+            const clonedInputs = clone.querySelectorAll('input');
+            
+            originalInputs.forEach((input, index) => {
+                const textValue = input.value;
+                const parent = clonedInputs[index].parentNode;
+                
+                // Create a beautiful printed text element instead of an input field
+                const span = document.createElement('span');
+                span.className = "text-sm font-semibold text-slate-700 block py-1 border-b border-dashed border-pink-100 flex-grow pl-1";
+                span.innerText = textValue || "────────────────────";
+                
+                // Replace the input with the static styled span
+                parent.replaceChild(span, clonedInputs[index]);
+
+                // Hide clear button in clones
+                const btn = parent.querySelector('button');
+                if (btn) btn.style.display = 'none';
+            });
+
+            // Put layout preview into container
+            previewContainer.innerHTML = "";
+            previewContainer.appendChild(clone);
+            
+            // Open print modal
+            document.getElementById("print-modal").classList.remove("hidden");
+        }
+
+        function closePrintModal() {
+            document.getElementById("print-modal").classList.add("hidden");
+        }
+
+        function triggerActualPrint() {
+            window.print();
+        }
+    </script>
+
+    <!-- PRINT STYLESHEET OVERRIDE FOR TRUE PORTRAIT PAGE PRESERVATION -->
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-modal, #print-modal * {
+                visibility: visible;
+            }
+            #print-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #print-preview-container, #print-preview-container * {
+                visibility: visible;
+            }
+            /* Hide print instructions and control buttons */
+            #print-modal button, #print-modal p, #print-modal h3 {
+                display: none !important;
+            }
+            /* Fill the layout perfectly */
+            #print-preview-container {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</body>
+</html>
