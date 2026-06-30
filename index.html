@@ -95,6 +95,14 @@
             animation: bounce 0.5s infinite alternate;
         }
 
+        /* 選中時間槽進行對調/轉移的外框高亮與微縮放效果 */
+        .active-source-box {
+            border: 3px solid #6366f1 !important;
+            box-shadow: 0 0 18px rgba(99, 102, 241, 0.65) !important;
+            background-color: #f5f3ff !important;
+            transform: scale(1.03);
+        }
+
         @keyframes bounce {
             from { transform: scale(1.1) rotate(5deg) translateY(0); }
             to { transform: scale(1.1) rotate(5deg) translateY(-5px); }
@@ -344,7 +352,8 @@
         // 應用狀態
         let boardState = {}; // 格式為 { "08:00": { stickerId: "001", text: "Wake Up" } }
         let customStickers = {}; // 存放上傳自定義貼紙的 Base64 數據
-        let activeSelectedStickerId = null; // 手機點擊選中貼紙流
+        let activeSelectedStickerId = null; // 手機點擊選中右側面板貼紙流
+        let activeSourceTime = null; // 新增：存放當前選中準備進行對調/轉移的時間槽來源
         let audioEnabled = true;
 
         // 音效合成器
@@ -498,18 +507,23 @@
 
         // 處理手機選取高亮狀態
         function selectStickerForTap(id) {
+            // 清除可能存在的時間槽選取
+            activeSourceTime = null;
+
             document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
                 el.classList.remove("active-sticker");
             });
 
             if (activeSelectedStickerId === id) {
                 activeSelectedStickerId = null;
+                renderScheduleSlots(); // 刷新以清除時間槽選取高亮
             } else {
                 activeSelectedStickerId = id;
                 const activeEl = document.getElementById(`drawer-sticker-${id}`);
                 if (activeEl) {
                     activeEl.classList.add("active-sticker");
                 }
+                renderScheduleSlots(); // 刷新以清除時間槽選取高亮
                 showToast(`Sticker ${id} selected! Tap any schedule box to place.`, "⭐");
             }
         }
@@ -562,6 +576,10 @@
             }
 
             const safeId = `box-${time.replace(':', '-')}`;
+            
+            // 判斷當前時間槽是否為被選中的來源時間槽，若是則加上 active-source-box 高亮樣式
+            const isSourceActive = (activeSourceTime === time);
+            const sourceHighlightClass = isSourceActive ? "active-source-box" : "";
 
             div.innerHTML = `
                 <!-- 時間標題改為可直接打字編輯的 Input 輸入框 -->
@@ -575,7 +593,7 @@
                 </div>
 
                 <!-- 圓角輸入卡片（高度提升至 88px） -->
-                <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
+                <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm ${sourceHighlightClass}" 
                      id="${safeId}" 
                      data-time="${time}">
                     
@@ -622,16 +640,44 @@
                 }
             });
 
-            // 點擊事件（避免打字與清除按鈕衝突）
+            // 點擊事件（結合了貼紙放置以及全新的點對點「對調/轉移」機制）
             const writingBox = div.querySelector('.writing-box');
             writingBox.addEventListener('click', function(e) {
                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                    
+                    // 情況 1：已點擊選中了右側貼紙面板的貼紙
                     if (activeSelectedStickerId) {
                         placeSticker(time, activeSelectedStickerId);
                         document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
                             el.classList.remove("active-sticker");
                         });
                         activeSelectedStickerId = null;
+                    } 
+                    // 情況 2：點對點轉移——已經點擊選中了第一個時間槽 (activeSourceTime)
+                    else if (activeSourceTime) {
+                        if (activeSourceTime === time) {
+                            // 再次點擊同一個時間槽，代表取消選取
+                            activeSourceTime = null;
+                            renderScheduleSlots();
+                            showToast("Selection cancelled", "✨");
+                        } else {
+                            // 點擊了第二個不同的時間槽，自動執行轉移/對調
+                            transferSlot(activeSourceTime, time);
+                        }
+                    } 
+                    // 情況 3：點對點轉移——沒有任何選取狀態，選中此含有貼紙或計畫的時間槽作為來源
+                    else {
+                        if (boardState[time] && (boardState[time].stickerId || boardState[time].text)) {
+                            activeSourceTime = time;
+                            // 清除可能存在的右側貼紙選取
+                            activeSelectedStickerId = null;
+                            document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
+                                el.classList.remove("active-sticker");
+                            });
+                            playCuteSound('select');
+                            renderScheduleSlots(); // 重新渲染以更新高亮藍紫色外框
+                            showToast(`Picked up ${time}. Tap another slot to transfer! 🔄`, "⭐");
+                        }
                     }
                 }
             });
@@ -697,10 +743,40 @@
                 delete boardState[oldTime];
             }
 
+            // 若正被選中為來源，同步更新
+            if (activeSourceTime === oldTime) {
+                activeSourceTime = newTime;
+            }
+
             autoSaveSlots();
             autoSaveToStorage();
             renderScheduleSlots();
             showToast("Time updated! ⏰", "💖");
+        }
+
+        // 點對點魔法轉移/對調核心邏輯
+        function transferSlot(fromTime, toTime) {
+            if (!boardState[fromTime]) return;
+            
+            playCuteSound('drop');
+            const sourceData = { ...boardState[fromTime] };
+            
+            if (boardState[toTime]) {
+                // 如果目標時段也有計畫，則雙向相互對調 (Swap)
+                const targetData = { ...boardState[toTime] };
+                boardState[toTime] = sourceData;
+                boardState[fromTime] = targetData;
+                showToast(`Plans swapped between ${fromTime} and ${toTime}! 🔄`, "✨");
+            } else {
+                // 如果目標時段為空，直接將計畫移轉過去 (Move)
+                boardState[toTime] = sourceData;
+                delete boardState[fromTime];
+                showToast(`Plans moved from ${fromTime} to ${toTime}! 🔄`, "✨");
+            }
+            
+            activeSourceTime = null; // 重置選取狀態
+            renderScheduleSlots();
+            autoSaveToStorage();
         }
 
         // 放置貼紙與文字自動配對邏輯
@@ -734,6 +810,9 @@
         function clearSingleSlot(time) {
             playCuteSound('clear');
             delete boardState[time];
+            if (activeSourceTime === time) {
+                activeSourceTime = null;
+            }
             renderScheduleSlots();
             autoSaveToStorage();
             showToast(`Slot ${time} cleared!`, "🧹");
@@ -743,6 +822,7 @@
         function clearAllSlots() {
             playCuteSound('clear');
             boardState = {};
+            activeSourceTime = null;
             morningSlots = [...morningSlotsDef];
             eveningSlots = [...eveningSlotsDef];
             autoSaveSlots();
