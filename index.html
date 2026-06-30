@@ -64,6 +64,7 @@
         /* 自定義可愛滾動條 */
         ::-webkit-scrollbar {
             width: 8px;
+            height: 6px; /* 增加水平滾動條高度 */
         }
         ::-webkit-scrollbar-track {
             background: #fff4f6;
@@ -117,7 +118,8 @@
     <div class="absolute bottom-20 left-16 text-indigo-300 sparkle text-lg pointer-events-none opacity-60" style="animation-delay: 2s;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
     <div class="absolute bottom-40 right-12 text-teal-300 sparkle text-xl pointer-events-none opacity-60" style="animation-delay: 1.5s;"><i class="fa-solid fa-cloud"></i></div>
 
-    <div class="max-w-6xl mx-auto bg-white/75 backdrop-blur-md rounded-[32px] p-6 md:p-8 magical-border relative">
+    <!-- 容器最大寬度提升至 1400px 以增加時間列與輸入欄位的排版闊度 -->
+    <div class="max-w-[1400px] mx-auto bg-white/75 backdrop-blur-md rounded-[32px] p-6 md:p-8 magical-border relative">
         
         <!-- 角落裝飾星星 -->
         <div class="absolute top-3 left-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
@@ -289,7 +291,7 @@
 
     <!-- 列印 / 預覽彈窗 -->
     <div id="print-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative magical-border max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 shadow-2xl relative magical-border max-h-[90vh] overflow-y-auto">
             <button onclick="closePrintModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
                 <i class="fa-solid fa-circle-xmark"></i>
             </button>
@@ -565,16 +567,12 @@
                 }
             }
 
-            // 動態調整多貼紙的排版與大小，以完美地塞入 w-20 h-20 的展示框
+            // 修改點：即使多個貼紙也維持超大尺寸 w-16 h-16 (64px) 呈現，不再動態縮小！
             let stickerRenderHtml = "";
             if (stickersArray.length > 0) {
-                const count = stickersArray.length;
-                let sizeClass = "w-18 h-18";
-                if (count === 2) sizeClass = "w-9 h-9";
-                else if (count >= 3 && count <= 4) sizeClass = "w-8 h-8";
-                else if (count > 4) sizeClass = "w-6 h-6";
+                const sizeClass = "w-16 h-16"; // 永久固定大尺寸貼紙
 
-                stickerRenderHtml = `<div class="flex flex-wrap gap-1 items-center justify-center w-full h-full p-1">`;
+                stickerRenderHtml = `<div class="flex flex-row gap-2 items-center justify-start h-full p-1.5 w-max">`;
                 stickersArray.forEach((stId, idx) => {
                     let stickerInner = "";
                     if (customStickers[stId]) {
@@ -595,7 +593,7 @@
                     }
 
                     stickerRenderHtml += `
-                        <div class="relative group/sticker cursor-pointer" onclick="event.stopPropagation();" ondblclick="event.stopPropagation(); removeSpecificSticker('${time}', ${idx});">
+                        <div class="relative group/sticker cursor-pointer flex-shrink-0" onclick="event.stopPropagation();" ondblclick="event.stopPropagation(); removeSpecificSticker('${time}', ${idx});">
                             ${stickerInner}
                             <!-- 貼紙個別懸停關閉按鈕 -->
                             <div class="absolute -top-1.5 -right-1.5 bg-rose-400 text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] opacity-0 group-hover/sticker:opacity-100 transition-opacity shadow-sm" onclick="event.stopPropagation(); removeSpecificSticker('${time}', ${idx});">
@@ -632,8 +630,8 @@
                     <!-- 背景亮麗小星星 -->
                     <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
 
-                    <!-- 放置貼紙的大格子（w-20 h-20） -->
-                    <div class="sticker-spot w-20 h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none">
+                    <!-- 放置貼紙的大格子：從 w-20 改為動態寬度 w-auto 且設有最小寬度 min-w-[5rem]，極限寬度 260px，支援橫向滾動以完美放置多個不縮小的大貼紙 -->
+                    <div class="sticker-spot min-w-[5rem] h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none w-auto max-w-[260px] overflow-x-auto">
                         ${stickerRenderHtml ? stickerRenderHtml : `
                             <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
                                 <i class="fa-solid fa-wand-magic text-base mb-0.5 animate-pulse"></i>
@@ -642,7 +640,7 @@
                         `}
                     </div>
 
-                    <!-- 輸入欄位（改為 textarea 以容許多行文字輸入，保持最大寬度 240px，字體 text-lg 粗體） -->
+                    <!-- 輸入欄位（ textarea 容許多行文字輸入，保持最大寬度 240px，字體 text-lg 粗體） -->
                     <div class="flex-grow max-w-[240px] relative z-10 flex items-center">
                         <textarea 
                                placeholder="Type plans..." 
