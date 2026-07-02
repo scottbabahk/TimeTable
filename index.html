@@ -118,7 +118,7 @@
     <div class="absolute bottom-20 left-16 text-indigo-300 sparkle text-lg pointer-events-none opacity-60" style="animation-delay: 2s;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
     <div class="absolute bottom-40 right-12 text-teal-300 sparkle text-xl pointer-events-none opacity-60" style="animation-delay: 1.5s;"><i class="fa-solid fa-cloud"></i></div>
 
-    <!-- 容器最大寬度提升至 1400px 以增加時間列與輸入欄位的排版闊度 -->
+    <!-- 容器最大寬度為 1400px，提供橫向一字排開大貼紙的完美展示寬度 -->
     <div class="max-w-[1400px] mx-auto bg-white/75 backdrop-blur-md rounded-[32px] p-6 md:p-8 magical-border relative">
         
         <!-- 角落裝飾星星 -->
@@ -141,15 +141,10 @@
 
             <!-- 標題佈局 -->
             <div class="relative z-10 flex flex-col md:flex-row items-center justify-center gap-4">
-                
                 <div class="text-left text-center md:text-left">
-                    <div class="inline-flex items-center gap-2 bg-pink-100 text-pink-500 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-2">
-                        <i class="fa-solid fa-sparkles animate-pulse"></i> Whimsical Daily Planner
-                    </div>
                     <h1 class="title-font text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-indigo-500 drop-shadow-sm">
                         MY MAGICAL DAILY TIMETABLE
                     </h1>
-                    <p class="text-sm text-slate-500 italic mt-1 font-medium">Design your magical day! Drag or tap stickers onto timeslots! ✨🦄</p>
                 </div>
 
                 <!-- 雲朵上的可愛獨角獸 -->
@@ -193,86 +188,31 @@
             </button>
         </div>
 
-        <!-- 主要版面網格 -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-            
-            <!-- 左側：時間表欄位 -->
-            <div id="print-area" class="lg:col-span-3 bg-white/90 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-dashed border-pink-100 star-pattern">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                    
-                    <!-- 左欄：上午到中午 (08:00 - 14:00) -->
-                    <div>
-                        <h3 class="title-font text-lg font-bold text-sky-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-sky-100 pb-2">
-                            <i class="fa-solid fa-sun-cloud text-yellow-400 animate-pulse"></i> Morning & Afternoon
-                        </h3>
-                        <div class="space-y-4" id="morning-slots">
-                            <!-- 由 JS 動態生成 08:00 - 14:00 -->
-                        </div>
-                    </div>
-
-                    <!-- 右欄：下午到晚上 (15:00 - 22:00) -->
-                    <div class="mt-6 md:mt-0">
-                        <h3 class="title-font text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-indigo-100 pb-2">
-                            <i class="fa-solid fa-moon-stars text-indigo-300"></i> Afternoon & Night
-                        </h3>
-                        <div class="space-y-4" id="evening-slots">
-                            <!-- 由 JS 動態生成 15:00 - 22:00 -->
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- 右側：貼紙選單與上傳控制 -->
-            <div class="lg:col-span-1 space-y-6">
+        <!-- 主要日程面板 (w-full 滿版全寬呈現) -->
+        <div id="print-area" class="w-full bg-white/90 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-dashed border-pink-100 star-pattern">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
                 
-                <!-- 貼紙抽屜面板 -->
-                <div class="bg-gradient-to-b from-pink-50 to-purple-50 rounded-2xl p-5 border-2 border-pink-200 shadow-sm relative">
-                    
-                    <h3 class="title-font text-lg font-bold text-pink-500 mb-2 flex items-center gap-2 border-b border-pink-200 pb-2">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Magic Stickers
+                <!-- 左欄：上午到中午 (08:00 - 14:00) -->
+                <div>
+                    <h3 class="title-font text-lg font-bold text-sky-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-sky-100 pb-2">
+                        <i class="fa-solid fa-sun-cloud text-yellow-400 animate-pulse"></i> Morning & Afternoon
                     </h3>
-                    
-                    <p class="text-xs text-slate-500 mb-4 leading-relaxed bg-white/70 p-2 rounded-lg border border-pink-100">
-                        ✨ <b>Drag</b> any sticker directly to a schedule slot, OR <b>Tap</b> a sticker below and then <b>Tap</b> your desired time slot!
-                    </p>
-
-                    <!-- 貼紙網格（每行2個） -->
-                    <div class="grid grid-cols-2 gap-3" id="stickers-container">
-                        <!-- 由 JS 動態生成貼紙 (001 - 010) -->
-                    </div>
-
-                    <!-- 提示資訊 -->
-                    <div class="mt-4 pt-3 border-t border-dashed border-pink-200 text-center text-xs text-pink-400 font-semibold animate-pulse">
-                        <i class="fa-solid fa-sparkles"></i> Double tap a sticker inside the slot to remove it!
+                    <div class="space-y-4" id="morning-slots">
+                        <!-- 由 JS 動態生成 08:00 - 14:00 -->
                     </div>
                 </div>
 
-                <!-- 自定義 PNG 貼紙上傳管理 -->
-                <div class="bg-white/80 rounded-2xl p-5 border-2 border-sky-100 shadow-sm">
-                    <h4 class="title-font text-sm font-bold text-sky-500 mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-image"></i> Custom Sticker Upload
-                    </h4>
-                    <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-                        Have your own files? Upload pictures (001.png to 010.png) to replace default stickers:
-                    </p>
-                    
-                    <div class="space-y-2">
-                        <label class="flex flex-col items-center justify-center border-2 border-dashed border-sky-200 rounded-xl p-3 bg-sky-50/50 cursor-pointer hover:bg-sky-50 transition-all group">
-                            <i class="fa-solid fa-cloud-arrow-up text-sky-400 text-xl group-hover:scale-110 transition-transform"></i>
-                            <span class="text-xs font-semibold text-sky-600 mt-1">Upload PNG Stickers</span>
-                            <span class="text-[10px] text-slate-400">Accepts files 001 - 010</span>
-                            <input type="file" class="hidden" id="png-uploader" multiple accept="image/png, image/jpeg">
-                        </label>
-                        
-                        <div id="upload-status" class="text-[11px] font-medium text-emerald-600 hidden text-center bg-emerald-50 py-1 rounded">
-                            <i class="fa-solid fa-circle-check"></i> Custom stickers loaded!
-                        </div>
+                <!-- 右欄：下午到晚上 (15:00 - 22:00) -->
+                <div class="mt-6 md:mt-0">
+                    <h3 class="title-font text-lg font-bold text-indigo-400 mb-4 flex items-center gap-2 border-b-2 border-dashed border-indigo-100 pb-2">
+                        <i class="fa-solid fa-moon-stars text-indigo-300"></i> Afternoon & Night
+                    </h3>
+                    <div class="space-y-4" id="evening-slots">
+                        <!-- 由 JS 動態生成 15:00 - 22:00 -->
                     </div>
                 </div>
 
             </div>
-
         </div>
 
         <!-- 頁尾資訊 -->
@@ -281,6 +221,24 @@
             <p>© 2026 My Magical Daily Timetable. Sparkle on!</p>
         </footer>
 
+    </div>
+
+    <!-- 彈出式貼紙選擇面板 (STICKER PICKER MODAL) -> 寬度 max-w-4xl (橫向長方形) -->
+    <div id="sticker-picker-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-8 shadow-2xl relative magical-border transform transition-all scale-95 duration-200">
+            <button onclick="closeStickerPicker()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl transition-all hover:scale-110">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            <h3 class="title-font text-2xl font-bold text-pink-500 mb-1 text-center flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 選擇魔法貼紙 ✨
+            </h3>
+            <p class="text-sm text-slate-400 text-center mb-6">點擊下方貼紙，即可放入 <span id="picker-target-time" class="font-extrabold text-indigo-500 text-base"></span> 日程中！</p>
+            
+            <!-- 貼紙網格：每行 4 個貼紙 (grid-cols-4) 橫向平鋪 -->
+            <div class="grid grid-cols-4 gap-4 max-h-[55vh] overflow-y-auto p-2" id="modal-stickers-container">
+                <!-- 由 JS 動態生成貼紙供選擇 -->
+            </div>
+        </div>
     </div>
 
     <!-- 提示框系統 -->
@@ -317,16 +275,16 @@
     <script>
         // 默認貼紙定義，對應本地 images 001.png - 010.png 
         const defaultStickers = {
-            "001": { name: "Magic Book", emoji: "📚", img: "images/001.png" },
-            "002": { name: "Star Wand", emoji: "🪄", img: "images/002.png" },
-            "003": { name: "Cupcake", emoji: "🧁", img: "images/003.png" },
-            "004": { name: "Toy Dino", emoji: "🦕", img: "images/004.png" },
-            "005": { name: "Rainbow Cloud", emoji: "🌈", img: "images/005.png" },
-            "006": { name: "Shiny Star", emoji: "⭐", img: "images/006.png" },
-            "007": { name: "Magic Orb", emoji: "🔮", img: "images/007.png" },
-            "008": { name: "Lucky Cat", emoji: "🐱", img: "images/008.png" },
-            "009": { name: "Music Notes", emoji: "🎵", img: "images/009.png" },
-            "010": { name: "Sleepy Moon", emoji: "🌙", img: "images/010.png" }
+            "001": { name: "Wake Up", emoji: "📚", img: "images/001.png" },
+            "002": { name: "Breakfast", emoji: "🪄", img: "images/002.png" },
+            "003": { name: "Learning Activity", emoji: "🧁", img: "images/003.png" },
+            "004": { name: "Self-Study", emoji: "🦕", img: "images/004.png" },
+            "005": { name: "Lunch", emoji: "🌈", img: "images/005.png" },
+            "006": { name: "Tea", emoji: "⭐", img: "images/006.png" },
+            "007": { name: "Dinner", emoji: "🔮", img: "images/007.png" },
+            "008": { name: "Piano", emoji: "🐱", img: "images/008.png" },
+            "009": { name: "Playtime", emoji: "🎵", img: "images/009.png" },
+            "010": { name: "Bedtime", emoji: "🌙", img: "images/010.png" }
         };
 
         // 貼紙對應自動填入的文字對照表
@@ -353,9 +311,10 @@
 
         // 應用狀態
         let boardState = {}; // 格式為 { "08:00": { stickers: ["001", "002"], text: "Wake Up" } }
-        let customStickers = {}; // 存放上傳自定義貼紙的 Base64 數據
-        let activeSelectedStickerId = null; // 手機點擊選中右側面板貼紙流
+        let customStickers = {}; // 被完全隱藏，留作數據相容
+        let activeSelectedStickerId = null; 
         let activeSourceTime = null; // 存放當前選中準備進行對調/轉移的時間槽來源
+        let activeTargetTimeForPopup = null; // 當前正在等待彈窗選擇貼紙的時間槽
         let audioEnabled = true;
 
         // 音效合成器
@@ -444,90 +403,77 @@
         // 初始化加載
         window.onload = function() {
             loadFromStorage();
-            renderStickerDrawer();
             renderScheduleSlots();
             setupDragAndDrop();
-            setupPngUploader();
         };
 
-        // 渲染貼紙選擇面板
-        function renderStickerDrawer() {
-            const container = document.getElementById("stickers-container");
+        // 彈出貼紙選單彈窗
+        function openStickerPicker(time) {
+            activeTargetTimeForPopup = time;
+            document.getElementById('picker-target-time').innerText = time;
+            renderModalStickerOptions();
+            
+            const modal = document.getElementById('sticker-picker-modal');
+            modal.classList.remove('hidden');
+            const modalBox = modal.querySelector('.magical-border');
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+            
+            playCuteSound('select');
+        }
+
+        function closeStickerPicker() {
+            const modal = document.getElementById('sticker-picker-modal');
+            const modalBox = modal.querySelector('.magical-border');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                activeTargetTimeForPopup = null;
+            }, 100);
+        }
+
+        // 渲染彈窗內部的貼紙按鈕 (移除 001 - 010 數字，只顯示大尺寸貼紙和行程名稱)
+        function renderModalStickerOptions() {
+            const container = document.getElementById("modal-stickers-container");
             container.innerHTML = "";
             
             Object.keys(defaultStickers).sort().forEach(id => {
                 const item = defaultStickers[id];
                 const stickerDiv = document.createElement("div");
-                stickerDiv.className = "bg-white p-3 rounded-xl border border-pink-100 shadow-sm cursor-pointer hover:-translate-y-1 hover:shadow-md hover:border-pink-300 active:scale-95 transition-all duration-200 relative group flex flex-col items-center select-none";
-                stickerDiv.id = `drawer-sticker-${id}`;
-                stickerDiv.setAttribute("draggable", "true");
-                stickerDiv.setAttribute("data-sticker-id", id);
+                stickerDiv.className = "bg-pink-50/40 p-4 rounded-3xl border border-pink-100 shadow-sm cursor-pointer hover:bg-pink-100/60 hover:border-pink-300 hover:-translate-y-1 active:scale-95 transition-all duration-200 flex flex-col items-center select-none text-center justify-center";
                 
-                let stickerGraphics = "";
-                if (customStickers[id]) {
-                    stickerGraphics = `<img src="${customStickers[id]}" class="w-20 h-20 object-contain pointer-events-none" />`;
-                } else {
-                    stickerGraphics = `
-                        <div class="relative w-20 h-20 flex items-center justify-center">
-                            <img src="images/${id}.png" 
-                                 alt="Sticker ${id}" 
-                                 class="w-20 h-20 object-contain pointer-events-none relative z-10" 
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                            />
-                            <div class="hidden absolute inset-0 w-20 h-20 flex flex-col items-center justify-center bg-pink-100 rounded-lg text-3xl select-none">
-                                <span>${item.emoji}</span>
-                            </div>
+                // 貼紙顯示尺寸加大至 w-24 h-24（超大可愛大圖尺寸）
+                const stickerGraphics = `
+                    <div class="relative w-24 h-24 flex items-center justify-center">
+                        <img src="images/${id}.png" 
+                             alt="Sticker ${id}" 
+                             class="w-24 h-24 object-contain pointer-events-none relative z-10" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        />
+                        <div class="hidden absolute inset-0 w-24 h-24 flex flex-col items-center justify-center bg-pink-100 rounded-2xl text-4xl select-none">
+                            <span>${item.emoji}</span>
                         </div>
-                    `;
-                }
-
-                stickerDiv.innerHTML = `
-                    ${stickerGraphics}
-                    <span class="text-xs font-bold text-slate-400 mt-2">${id}</span>
+                    </div>
                 `;
 
-                // 拖曳開始事件
-                stickerDiv.addEventListener("dragstart", function(e) {
-                    playCuteSound('select');
-                    e.dataTransfer.setData("text/plain", id);
-                    stickerDiv.classList.add("opacity-50");
-                });
+                // 移除 001 - 010 的文字
+                stickerDiv.innerHTML = `
+                    ${stickerGraphics}
+                    <span class="text-xs text-slate-600 font-bold bg-white/80 px-2.5 py-1 rounded-full mt-3 border border-pink-100/50 block">${item.name}</span>
+                `;
 
-                stickerDiv.addEventListener("dragend", function() {
-                    stickerDiv.classList.remove("opacity-50");
-                });
-
-                // 手機點擊選中事件
+                // 點擊貼紙後直接放入並關閉彈窗
                 stickerDiv.addEventListener("click", function() {
-                    playCuteSound('select');
-                    selectStickerForTap(id);
+                    if (activeTargetTimeForPopup) {
+                        placeSticker(activeTargetTimeForPopup, id);
+                        closeStickerPicker();
+                    }
                 });
 
                 container.appendChild(stickerDiv);
             });
-        }
-
-        // 處理手機選取高亮狀態
-        function selectStickerForTap(id) {
-            // 清除可能存在的時間槽選取
-            activeSourceTime = null;
-
-            document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
-                el.classList.remove("active-sticker");
-            });
-
-            if (activeSelectedStickerId === id) {
-                activeSelectedStickerId = null;
-                renderScheduleSlots(); // 刷新以清除時間槽選取高亮
-            } else {
-                activeSelectedStickerId = id;
-                const activeEl = document.getElementById(`drawer-sticker-${id}`);
-                if (activeEl) {
-                    activeEl.classList.add("active-sticker");
-                }
-                renderScheduleSlots(); // 刷新以清除時間槽選取高亮
-                showToast(`Sticker ${id} selected! Tap any schedule box to place.`, "⭐");
-            }
         }
 
         // 渲染日程欄位
@@ -562,35 +508,29 @@
                 if (hasItem.stickers) {
                     stickersArray = hasItem.stickers;
                 } else if (hasItem.stickerId) {
-                    // 相容舊格式
                     stickersArray = [hasItem.stickerId];
                 }
             }
 
-            // 修改點：即使多個貼紙也維持超大尺寸 w-16 h-16 (64px) 呈現，不再動態縮小！
+            // 多個貼紙也維持超大尺寸 w-16 h-16 (64px) 呈現，一字排開
             let stickerRenderHtml = "";
             if (stickersArray.length > 0) {
-                const sizeClass = "w-16 h-16"; // 永久固定大尺寸貼紙
+                const sizeClass = "w-16 h-16"; 
 
                 stickerRenderHtml = `<div class="flex flex-row gap-2 items-center justify-start h-full p-1.5 w-max">`;
                 stickersArray.forEach((stId, idx) => {
-                    let stickerInner = "";
-                    if (customStickers[stId]) {
-                        stickerInner = `<img src="${customStickers[stId]}" class="${sizeClass} object-contain pointer-events-none" />`;
-                    } else if (defaultStickers[stId]) {
-                        stickerInner = `
-                            <div class="relative ${sizeClass} flex items-center justify-center">
-                                <img src="images/${stId}.png" 
-                                     alt="Sticker ${stId}" 
-                                     class="${sizeClass} object-contain pointer-events-none relative z-10" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                />
-                                <div class="hidden absolute inset-0 ${sizeClass} flex flex-col items-center justify-center bg-pink-100 rounded-lg text-lg select-none">
-                                    <span class="text-xs">${defaultStickers[stId].emoji}</span>
-                                </div>
+                    let stickerInner = `
+                        <div class="relative ${sizeClass} flex items-center justify-center">
+                            <img src="images/${stId}.png" 
+                                 alt="Sticker ${stId}" 
+                                 class="${sizeClass} object-contain pointer-events-none relative z-10" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="hidden absolute inset-0 ${sizeClass} flex flex-col items-center justify-center bg-pink-100 rounded-lg text-lg select-none">
+                                <span class="text-xs">${defaultStickers[stId] ? defaultStickers[stId].emoji : '✨'}</span>
                             </div>
-                        `;
-                    }
+                        </div>
+                    `;
 
                     stickerRenderHtml += `
                         <div class="relative group/sticker cursor-pointer flex-shrink-0" onclick="event.stopPropagation();" ondblclick="event.stopPropagation(); removeSpecificSticker('${time}', ${idx});">
@@ -606,8 +546,6 @@
             }
 
             const safeId = `box-${time.replace(':', '-')}`;
-            
-            // 判斷當前時間槽是否為被選中的來源時間槽，若是則加上 active-source-box 高亮樣式
             const isSourceActive = (activeSourceTime === time);
             const sourceHighlightClass = isSourceActive ? "active-source-box" : "";
 
@@ -622,7 +560,7 @@
                     />
                 </div>
 
-                <!-- 圓角輸入卡片（高度提升至 88px） -->
+                <!-- 圓角輸入卡片（高度 88px） -->
                 <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm ${sourceHighlightClass}" 
                      id="${safeId}" 
                      data-time="${time}">
@@ -630,8 +568,8 @@
                     <!-- 背景亮麗小星星 -->
                     <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
 
-                    <!-- 放置貼紙的大格子：從 w-20 改為動態寬度 w-auto 且設有最小寬度 min-w-[5rem]，極限寬度 260px，支援橫向滾動以完美放置多個不縮小的大貼紙 -->
-                    <div class="sticker-spot min-w-[5rem] h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none w-auto max-w-[260px] overflow-x-auto">
+                    <!-- 放置貼紙的大格子：寬度 w-auto，極限寬度 260px，支援橫向滾動以完美放置多個不縮小的大貼紙 -->
+                    <div class="sticker-spot min-w-[5rem] h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none w-auto max-w-[260px] overflow-x-auto cursor-pointer hover:bg-pink-100/40 transition-colors">
                         ${stickerRenderHtml ? stickerRenderHtml : `
                             <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
                                 <i class="fa-solid fa-wand-magic text-base mb-0.5 animate-pulse"></i>
@@ -640,7 +578,7 @@
                         `}
                     </div>
 
-                    <!-- 輸入欄位（ textarea 容許多行文字輸入，保持最大寬度 240px，字體 text-lg 粗體） -->
+                    <!-- 輸入欄位（ textarea 最大寬度 240px，字體 text-lg 粗體） -->
                     <div class="flex-grow max-w-[240px] relative z-10 flex items-center">
                         <textarea 
                                placeholder="Type plans..." 
@@ -662,50 +600,43 @@
                 </div>
             `;
 
-            // 雙擊貼紙欄空白處重置該欄位所有內容
+            // 點擊貼紙框部分，自動彈出 Picker 貼紙選擇面板
             const spot = div.querySelector('.sticker-spot');
+            spot.addEventListener('click', function(e) {
+                e.stopPropagation(); 
+                openStickerPicker(time);
+            });
+
+            // 雙擊貼紙欄空白處重置該欄位所有內容
             spot.addEventListener('dblclick', function(e) {
                 if (e.target === spot && boardState[time]) {
                     clearSingleSlot(time);
                 }
             });
 
-            // 點擊事件（結合了貼紙放置以及全新的點對點「對調/轉移」機制）
+            // 點擊事件（用於點對點「日程對調與轉移」機制）
             const writingBox = div.querySelector('.writing-box');
             writingBox.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                if (e.target.tagName !== 'INPUT' && 
+                    e.target.tagName !== 'TEXTAREA' && 
+                    e.target.tagName !== 'BUTTON' && 
+                    !e.target.closest('button') &&
+                    !e.target.closest('.sticker-spot')) {
                     
-                    // 情況 1：已點擊選中了右側貼紙面板的貼紙
-                    if (activeSelectedStickerId) {
-                        placeSticker(time, activeSelectedStickerId);
-                        document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
-                            el.classList.remove("active-sticker");
-                        });
-                        activeSelectedStickerId = null;
-                    } 
-                    // 情況 2：點對點轉移——已經點擊選中了第一個時間槽 (activeSourceTime)
-                    else if (activeSourceTime) {
+                    if (activeSourceTime) {
                         if (activeSourceTime === time) {
-                            // 再次點擊同一個時間槽，代表取消選取
                             activeSourceTime = null;
                             renderScheduleSlots();
                             showToast("Selection cancelled", "✨");
                         } else {
-                            // 點擊了第二個不同的時間槽，自動執行轉移/對調
                             transferSlot(activeSourceTime, time);
                         }
                     } 
-                    // 情況 3：點對點轉移——沒有任何選取狀態，選中此含有貼紙或計畫的時間槽作為來源
                     else {
-                        if (boardState[time] && ((boardState[time].stickers && boardState[time].stickers.length > 0) || boardState[time].stickerId || boardState[time].text)) {
+                        if (boardState[time] && ((boardState[time].stickers && boardState[time].stickers.length > 0) || boardState[time].text)) {
                             activeSourceTime = time;
-                            // 清除可能存在的右側貼紙選取
-                            activeSelectedStickerId = null;
-                            document.querySelectorAll("[id^='drawer-sticker-']").forEach(el => {
-                                el.classList.remove("active-sticker");
-                            });
                             playCuteSound('select');
-                            renderScheduleSlots(); // 重新渲染以更新高亮藍紫色外框
+                            renderScheduleSlots(); 
                             showToast(`Picked up ${time}. Tap another slot to transfer! 🔄`, "⭐");
                         }
                     }
@@ -715,26 +646,19 @@
             return div;
         }
 
-        // 拖曳核心事件綁定
+        // 拖曳核心事件綁定 (保持相容性)
         function setupDragAndDrop() {
             document.addEventListener("dragover", function(e) {
                 e.preventDefault();
             });
-
             document.addEventListener("dragenter", function(e) {
                 const dropBox = e.target.closest(".writing-box");
-                if (dropBox) {
-                    dropBox.classList.add("drag-hover");
-                }
+                if (dropBox) dropBox.classList.add("drag-hover");
             });
-
             document.addEventListener("dragleave", function(e) {
                 const dropBox = e.target.closest(".writing-box");
-                if (dropBox) {
-                    dropBox.classList.remove("drag-hover");
-                }
+                if (dropBox) dropBox.classList.remove("drag-hover");
             });
-
             document.addEventListener("drop", function(e) {
                 e.preventDefault();
                 const dropBox = e.target.closest(".writing-box");
@@ -753,12 +677,11 @@
         function updateTime(oldTime, newTime, column) {
             newTime = newTime.trim();
             if (!newTime) {
-                renderScheduleSlots(); // 為空時恢復原先時間
+                renderScheduleSlots();
                 return;
             }
             if (oldTime === newTime) return;
 
-            // 在 morningSlots 或 eveningSlots 清單中更換時間標籤
             if (column === 'morning') {
                 const idx = morningSlots.indexOf(oldTime);
                 if (idx !== -1) morningSlots[idx] = newTime;
@@ -767,13 +690,11 @@
                 if (idx !== -1) eveningSlots[idx] = newTime;
             }
 
-            // 更新 boardState 鍵值
             if (boardState[oldTime]) {
                 boardState[newTime] = { ...boardState[oldTime] };
                 delete boardState[oldTime];
             }
 
-            // 若正被選中為來源，同步更新
             if (activeSourceTime === oldTime) {
                 activeSourceTime = newTime;
             }
@@ -792,40 +713,32 @@
             const sourceData = { ...boardState[fromTime] };
             
             if (boardState[toTime]) {
-                // 如果目標時段也有計畫，則雙向相互對調 (Swap)
                 const targetData = { ...boardState[toTime] };
                 boardState[toTime] = sourceData;
                 boardState[fromTime] = targetData;
                 showToast(`Plans swapped between ${fromTime} and ${toTime}! 🔄`, "✨");
             } else {
-                // 如果目標時段為空，直接將計畫移轉過去 (Move)
                 boardState[toTime] = sourceData;
                 delete boardState[fromTime];
                 showToast(`Plans moved from ${fromTime} to ${toTime}! 🔄`, "✨");
             }
             
-            activeSourceTime = null; // 重置選取狀態
+            activeSourceTime = null; 
             renderScheduleSlots();
             autoSaveToStorage();
         }
 
-        // 放置貼紙與文字自動配對邏輯（已升級為多貼紙陣列操作）
+        // 放置貼紙與文字自動配對邏輯
         function placeSticker(time, stickerId) {
             playCuteSound('drop');
             if (!boardState[time]) {
                 boardState[time] = { stickers: [], text: "" };
             }
 
-            // 舊格式數據相容處理
-            if (boardState[time].stickerId) {
-                boardState[time].stickers = [boardState[time].stickerId];
-                delete boardState[time].stickerId;
-            }
             if (!boardState[time].stickers) {
                 boardState[time].stickers = [];
             }
 
-            // 限制單一时段最高 6 個貼紙，避免排版溢出
             if (boardState[time].stickers.length >= 6) {
                 showToast("Maximum 6 stickers per timeslot! 🌸", "⚠️");
                 return;
@@ -833,13 +746,11 @@
 
             boardState[time].stickers.push(stickerId);
 
-            // 如果該貼紙在對照表中有對應文字，則自動寫入/追加到文字備忘錄內
             if (stickerTextMap[stickerId]) {
                 const mapText = stickerTextMap[stickerId];
                 if (!boardState[time].text.trim()) {
                     boardState[time].text = mapText;
                 } else {
-                    // 如果已含有文字，判斷是否已重複。若不重複則以 & 追加
                     const currentText = boardState[time].text;
                     if (!currentText.includes(mapText)) {
                         boardState[time].text = currentText + " & " + mapText;
@@ -855,21 +766,11 @@
         // 個別貼紙移除功能
         function removeSpecificSticker(time, index) {
             playCuteSound('clear');
-            if (boardState[time]) {
-                // 相容舊格式處理
-                if (boardState[time].stickerId) {
-                    boardState[time].stickers = [boardState[time].stickerId];
-                    delete boardState[time].stickerId;
+            if (boardState[time] && boardState[time].stickers) {
+                boardState[time].stickers.splice(index, 1);
+                if (boardState[time].stickers.length === 0 && !boardState[time].text.trim()) {
+                    delete boardState[time];
                 }
-                
-                if (boardState[time].stickers) {
-                    boardState[time].stickers.splice(index, 1);
-                    // 如果所有貼紙都移除了且沒有文字，則清除此時段數據
-                    if (boardState[time].stickers.length === 0 && !boardState[time].text.trim()) {
-                        delete boardState[time];
-                    }
-                }
-                
                 renderScheduleSlots();
                 autoSaveToStorage();
                 showToast("Sticker removed! 🧹", "✨");
@@ -889,15 +790,13 @@
         function clearSingleSlot(time) {
             playCuteSound('clear');
             delete boardState[time];
-            if (activeSourceTime === time) {
-                activeSourceTime = null;
-            }
+            if (activeSourceTime === time) activeSourceTime = null;
             renderScheduleSlots();
             autoSaveToStorage();
             showToast(`Slot ${time} cleared!`, "🧹");
         }
 
-        // 重置整個看板（包含將時間表恢復為預設格式）
+        // 重置整個看板
         function clearAllSlots() {
             playCuteSound('clear');
             boardState = {};
@@ -910,13 +809,13 @@
             showToast("Timetable board reset completely!", "🧹");
         }
 
-        // 保存定義好的自定義時段
+        // 保存自定義時段
         function autoSaveSlots() {
             localStorage.setItem("magical_morning_slots", JSON.stringify(morningSlots));
             localStorage.setItem("magical_evening_slots", JSON.stringify(eveningSlots));
         }
 
-        // 保存管理
+        // 保存狀態
         function autoSaveToStorage() {
             localStorage.setItem("magical_timetable_state", JSON.stringify(boardState));
         }
@@ -928,8 +827,8 @@
             showToast("Progress saved to your browser! 🦄✨", "💖");
         }
 
+        // 載入進度
         function loadFromStorage() {
-            // 讀取自定義時間槽
             const savedMorning = localStorage.getItem("magical_morning_slots");
             const savedEvening = localStorage.getItem("magical_evening_slots");
             if (savedMorning) {
@@ -945,133 +844,11 @@
 
             const saved = localStorage.getItem("magical_timetable_state");
             if (saved) {
-                try {
-                    boardState = JSON.parse(saved);
-                } catch (e) {
-                    boardState = {};
-                }
+                try { boardState = JSON.parse(saved); } catch (e) { boardState = {}; }
             }
-            const savedCustoms = localStorage.getItem("magical_custom_stickers");
-            if (savedCustoms) {
-                try {
-                    customStickers = JSON.parse(savedCustoms);
-                } catch (e) {
-                    customStickers = {};
-                }
-            }
-        }
-
-        // 自定義 PNG 貼紙上傳
-        function setupPngUploader() {
-            const fileInput = document.getElementById("png-uploader");
-            const statusIndicator = document.getElementById("upload-status");
-
-            fileInput.addEventListener("change", function(e) {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                let loadCount = 0;
-                Array.from(files).forEach(file => {
-                    const name = file.name;
-                    const match = name.match(/0*(10|[1-9])/);
-                    let stickerId = "";
-                    
-                    if (match) {
-                        let parsedId = parseInt(match[0], 10);
-                        if (parsedId >= 1 && parsedId <= 10) {
-                            stickerId = String(parsedId).padStart(3, '0');
-                        }
-                    }
-
-                    if (!stickerId) {
-                        stickerId = String((loadCount % 10) + 1).padStart(3, '0');
-                    }
-
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        customStickers[stickerId] = evt.target.result;
-                        loadCount++;
-                        
-                        if (loadCount === files.length) {
-                            localStorage.setItem("magical_custom_stickers", JSON.stringify(customStickers));
-                            renderStickerDrawer();
-                            renderScheduleSlots();
-                            statusIndicator.classList.remove("hidden");
-                            statusIndicator.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${loadCount} custom stickers updated!`;
-                            playCuteSound('drop');
-                            showToast("Custom stickers processed! 🎨", "✨");
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-        }
-
-        // 彈窗小提示
-        function showToast(message, icon = "✨") {
-            const toast = document.getElementById("toast");
-            const toastMessage = document.getElementById("toast-message");
-            const toastIcon = document.getElementById("toast-icon");
-
-            toastIcon.innerText = icon;
-            toastMessage.innerText = message;
-            
-            toast.className = "fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-0 opacity-100 transition-all duration-300 flex items-center gap-2 font-medium text-sm";
-            
-            setTimeout(() => {
-                toast.className = "fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 font-medium text-sm";
-            }, 3000);
-        }
-
-        // 列印與導出佈局生成
-        function exportToImage() {
-            playCuteSound('drop');
-            const previewContainer = document.getElementById("print-preview-container");
-            const srcBoard = document.getElementById("print-area");
-            
-            const clone = srcBoard.cloneNode(true);
-            
-            // 將克隆的時間 input 替換為靜態 span 用於列印
-            const timeInputs = clone.querySelectorAll('.w-20 input');
-            timeInputs.forEach(input => {
-                const val = input.value;
-                const parent = input.parentNode;
-                const span = document.createElement('span');
-                span.className = "title-font text-2xl font-extrabold text-pink-500 tracking-wider";
-                span.innerText = val;
-                parent.replaceChild(span, input);
-            });
-
-            // 將克隆的 textarea 替換為靜態帶格式的 span 用於列印
-            const textareas = clone.querySelectorAll('.writing-box textarea');
-            textareas.forEach(textarea => {
-                const val = textarea.value;
-                const parent = textarea.parentNode;
-                const span = document.createElement('span');
-                span.className = "text-lg font-bold text-slate-700 block py-1 pl-1 whitespace-pre-wrap text-left";
-                span.innerText = val || "────────────────────";
-                parent.replaceChild(span, textarea);
-                
-                const btn = parent.parentNode.querySelector('button');
-                if (btn) btn.style.display = 'none';
-            });
-
-            previewContainer.innerHTML = "";
-            previewContainer.appendChild(clone);
-            
-            document.getElementById("print-modal").classList.remove("hidden");
-        }
-
-        function closePrintModal() {
-            document.getElementById("print-modal").classList.add("hidden");
-        }
-
-        function triggerActualPrint() {
-            window.print();
         }
     </script>
 
-    <!-- 列印特定樣式設定 -->
     <style>
         @media print {
             body * {
