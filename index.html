@@ -88,47 +88,29 @@
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        /* 選中貼紙高亮效果 */
-        .active-sticker {
-            border: 3px solid #ff4d88 !important;
-            box-shadow: 0 0 15px rgba(255, 77, 136, 0.6) !important;
-            transform: scale(1.1) rotate(5deg) !important;
-            animation: bounce 0.5s infinite alternate;
-        }
-
-        /* 選中時間槽進行對調/轉移的外框高亮與微縮放效果 */
+        /* 選中時間槽高亮外框 */
         .active-source-box {
             border: 3px solid #6366f1 !important;
             box-shadow: 0 0 18px rgba(99, 102, 241, 0.65) !important;
             background-color: #f5f3ff !important;
             transform: scale(1.03);
         }
-
-        @keyframes bounce {
-            from { transform: scale(1.1) rotate(5deg) translateY(0); }
-            to { transform: scale(1.1) rotate(5deg) translateY(-5px); }
-        }
     </style>
 </head>
 <body class="min-h-screen py-6 px-4 md:px-8 text-slate-700 relative overflow-x-hidden">
 
-    <!-- 背景裝飾星星 -->
     <div class="absolute top-10 left-10 text-pink-300 sparkle text-xl pointer-events-none opacity-60"><i class="fa-solid fa-sparkles"></i></div>
     <div class="absolute top-40 right-20 text-yellow-300 sparkle text-2xl pointer-events-none opacity-60" style="animation-delay: 1s;"><i class="fa-solid fa-star"></i></div>
     <div class="absolute bottom-20 left-16 text-indigo-300 sparkle text-lg pointer-events-none opacity-60" style="animation-delay: 2s;"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
     <div class="absolute bottom-40 right-12 text-teal-300 sparkle text-xl pointer-events-none opacity-60" style="animation-delay: 1.5s;"><i class="fa-solid fa-cloud"></i></div>
 
-    <!-- 容器最大寬度為 1400px -->
+    <!-- 主要容器 -->
     <div class="max-w-[1400px] mx-auto bg-white/75 backdrop-blur-md rounded-[32px] p-6 md:p-8 magical-border relative">
         
-        <!-- 角落裝飾星星 -->
         <div class="absolute top-3 left-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
         <div class="absolute top-3 right-3 text-pink-400 text-lg opacity-80"><i class="fa-solid fa-star-sharp"></i></div>
 
-        <!-- 標頭區域 -->
         <header class="relative mb-2 text-center flex flex-col items-center justify-center pt-2 pb-1">
-            
-            <!-- 彩虹背景 SVG -->
             <div class="absolute -top-6 w-full max-w-lg h-32 opacity-80 pointer-events-none -z-10">
                 <svg viewBox="0 0 500 150" class="w-full h-full">
                     <path d="M 50,150 A 200,200 0 0,1 450,150" fill="none" stroke="#ffe5ec" stroke-width="24" />
@@ -139,23 +121,21 @@
                 </svg>
             </div>
 
-            <!-- 標題佈局 -->
             <div class="relative z-10 flex flex-col md:flex-row items-center justify-center gap-4">
-                <div class="text-left text-center md:text-left">
+                <div class="text-center md:text-left">
                     <h1 class="title-font text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-indigo-500 drop-shadow-sm">
                         MY TIMETABLE
                     </h1>
                 </div>
 
-                <!-- 雲朵上的可愛獨角獸 -->
-                <div class="unicorn-float relative w-28 h-28 flex items-center justify-center">
-                    <svg class="absolute bottom-0 w-24 h-10 text-white fill-current filter drop-shadow-sm" viewBox="0 0 100 40">
+                <div class="unicorn-float relative w-24 h-24 flex items-center justify-center">
+                    <svg class="absolute bottom-0 w-20 h-8 text-white fill-current filter drop-shadow-sm" viewBox="0 0 100 40">
                         <path d="M10 30 Q 15 15, 30 20 Q 45 10, 60 20 Q 75 10, 85 25 Q 95 30, 90 35 L 10 35 Z" />
                         <circle cx="20" cy="28" r="8" />
                         <circle cx="45" cy="20" r="10" />
                         <circle cx="70" cy="24" r="9" />
                     </svg>
-                    <svg class="absolute bottom-4 w-16 h-18" viewBox="0 0 64 64">
+                    <svg class="absolute bottom-3 w-14 h-16" viewBox="0 0 64 64">
                         <path d="M15 35 C 10 25, 25 15, 38 20 C 45 23, 48 30, 48 38 C 48 48, 25 50, 15 42 Z" fill="#ffffff" stroke="#ffcbd5" stroke-width="2"/>
                         <path d="M15 35 C 12 33, 14 26, 22 24 C 26 23, 27 28, 25 32 Z" fill="#ffe5ec" />
                         <circle cx="19" cy="28" r="1" fill="#ff4d88" />
@@ -172,7 +152,6 @@
             </div>
         </header>
 
-        <!-- 功能按鈕列 -->
         <div class="flex flex-wrap justify-center gap-3 mb-6">
             <button onclick="clearAllSlots()" class="px-4 py-2 bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold rounded-full text-sm transition-all duration-300 flex items-center gap-2 transform hover:scale-105 shadow-sm active:scale-95">
                 <i class="fa-solid fa-trash-can"></i> Reset Board
@@ -185,24 +164,14 @@
             </button>
         </div>
 
-        <!-- 主要日程面板 -->
         <div id="print-area" class="w-full bg-white/90 rounded-2xl p-4 md:p-6 shadow-inner border-2 border-dashed border-pink-100 star-pattern">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                
-                <!-- 左欄：上午到中午 (08:00 - 14:00) -->
-                <div>
-                    <div class="space-y-4" id="morning-slots">
-                        <!-- 由 JS 動態生成 08:00 - 14:00 -->
-                    </div>
+                <div class="space-y-4" id="morning-slots">
+                    <!-- 由 JS 動態生成 08:00 - 14:00 -->
                 </div>
-
-                <!-- 右欄：下午到晚上 (15:00 - 22:00) -->
-                <div class="mt-6 md:mt-0">
-                    <div class="space-y-4" id="evening-slots">
-                        <!-- 由 JS 動態生成 15:00 - 22:00 -->
-                    </div>
+                <div class="space-y-4" id="evening-slots">
+                    <!-- 由 JS 動態生成 15:00 - 22:00 -->
                 </div>
-
             </div>
         </div>
 
@@ -214,7 +183,6 @@
 
     </div>
 
-    <!-- 彈出式貼紙選擇面板 (STICKER PICKER MODAL) -->
     <div id="sticker-picker-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-4xl w-full p-8 shadow-2xl relative magical-border transform transition-all scale-95 duration-200">
             <button onclick="closeStickerPicker()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl transition-all hover:scale-110">
@@ -225,9 +193,8 @@
             </h3>
             <p class="text-sm text-slate-400 text-center mb-6">點擊下方貼紙，即可放入 <span id="picker-target-time" class="font-extrabold text-indigo-500 text-base"></span> 日程中！</p>
             
-            <!-- 貼紙分組容器 -->
             <div class="space-y-6 max-h-[60vh] overflow-y-auto p-2" id="modal-stickers-container">
-                <!-- 由 JS 動態生成分組貼紙供選擇 -->
+                <!-- 由 JS 分組動態生成 -->
             </div>
         </div>
     </div>
@@ -238,55 +205,35 @@
         <span id="toast-message">Board Reset Successful!</span>
     </div>
 
-    <!-- 腳本邏輯 -->
     <script>
-        // 默認 19 個貼紙定義，對應本地 images/wakeup.png 等小寫檔名與路徑，包含預設時長(分鐘)
         const defaultStickers = {
             "wakeup": { name: "Wake Up", emoji: "📚", img: "images/wakeup.png", duration: 30 },
             "breakfast": { name: "Breakfast", emoji: "🪄", img: "images/breakfast.png", duration: 45 },
-            "putonghua": { name: "Putonghua", emoji: "🗣️", img: "images/putonghua.png", duration: 60 },
-            "choir": { name: "Choir", emoji: "🎤", img: "images/choir.png", duration: 60 },
             "lunch": { name: "Lunch", emoji: "🌈", img: "images/lunch.png", duration: 60 },
             "quiettime": { name: "Quiet Time", emoji: "🤫", img: "images/quiettime.png", duration: 30 },
             "tea": { name: "Tea", emoji: "⭐", img: "images/tea.png", duration: 20 },
             "dinner": { name: "Dinner", emoji: "🔮", img: "images/dinner.png", duration: 60 },
             "medicine": { name: "Medicine", emoji: "💊", img: "images/medicine.png", duration: 15 },
             "bedtime": { name: "Bedtime", emoji: "🌙", img: "images/bedtime.png", duration: 60 },
-            "transportation": { name: "Transportation", emoji: "🚗", img: "images/transportation.png", duration: 30 },
+
+            "mcs": { name: "MCS", emoji: "🏫", img: "images/mcs.png", duration: 60 },
             "chinese": { name: "Chinese", emoji: "📖", img: "images/chinese.png", duration: 60 },
             "english": { name: "English", emoji: "🔤", img: "images/english.png", duration: 60 },
             "maths": { name: "Maths", emoji: "🔢", img: "images/maths.png", duration: 60 },
             "science": { name: "Science", emoji: "🔬", img: "images/science.png", duration: 60 },
             "humanities": { name: "Humanities", emoji: "🌍", img: "images/humanities.png", duration: 60 },
-            "piano": { name: "Piano", emoji: "🐱", img: "images/piano.png", duration: 60 },
+            "putonghua": { name: "Putonghua", emoji: "🗣️", img: "images/putonghua.png", duration: 60 },
+
+            "transportation": { name: "Transportation", emoji: "🚗", img: "images/transportation.png", duration: 30 },
             "playtime": { name: "Playtime", emoji: "🎵", img: "images/playtime.png", duration: 60 },
+            "piano": { name: "Piano", emoji: "🐱", img: "images/piano.png", duration: 60 },
+            "choir": { name: "Choir", emoji: "🎶", img: "images/choir.png", duration: 60 },
+            "lego": { name: "Lego", emoji: "🧩", img: "images/lego.png", duration: 60 },
+            "drawing": { name: "Drawing", emoji: "🎨", img: "images/drawing.png", duration: 60 },
+            "shopping": { name: "Shopping", emoji: "🛍️", img: "images/shopping.png", duration: 60 },
             "others": { name: "Others", emoji: "🌟", img: "images/others.png", duration: 60 }
         };
 
-        // 貼紙對應自動填入的文字對照表
-        const stickerTextMap = {
-            "wakeup": "Wake Up",
-            "breakfast": "Breakfast",
-            "putonghua": "Putonghua",
-            "choir": "Choir",
-            "lunch": "Lunch",
-            "quiettime": "Quiet Time",
-            "tea": "Tea",
-            "dinner": "Dinner",
-            "medicine": "Medicine",
-            "bedtime": "Bedtime",
-            "transportation": "Transportation",
-            "chinese": "Chinese",
-            "english": "English",
-            "maths": "Maths",
-            "science": "Science",
-            "humanities": "Humanities",
-            "piano": "Piano",
-            "playtime": "Playtime",
-            "others": "Others"
-        };
-
-        // 貼紙選單分組與顯示順序定義
         const stickerGroups = [
             {
                 category: "Daily Routines",
@@ -296,32 +243,51 @@
             {
                 category: "Study",
                 icon: "fa-book-open",
-                stickers: ["chinese", "english", "maths", "science", "humanities", "piano", "putonghua", "choir"]
+                stickers: ["mcs", "chinese", "english", "maths", "science", "humanities", "putonghua"]
             },
             {
-                category: "Others",
+                category: "Hobbies / Others",
                 icon: "fa-icons",
-                stickers: ["transportation", "playtime", "others"]
+                stickers: ["transportation", "lego", "drawing", "shopping", "playtime", "piano", "choir", "others"]
             }
         ];
 
-        // 預設時間表定義（跳過 16:00 欄位）
+        const stickerTextMap = {
+            "wakeup": "Wake Up",
+            "breakfast": "Breakfast",
+            "lunch": "Lunch",
+            "quiettime": "Quiet Time",
+            "tea": "Tea",
+            "dinner": "Dinner",
+            "medicine": "Medicine",
+            "bedtime": "Bedtime",
+            "mcs": "MCS",
+            "chinese": "Chinese",
+            "english": "English",
+            "maths": "Maths",
+            "science": "Science",
+            "humanities": "Humanities",
+            "putonghua": "Putonghua",
+            "transportation": "Transportation",
+            "playtime": "Playtime",
+            "piano": "Piano",
+            "choir": "Choir",
+            "lego": "Lego",
+            "drawing": "Drawing",
+            "shopping": "Shopping",
+            "others": "Others"
+        };
+
         const morningSlotsDef = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
         const eveningSlotsDef = ["15:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
 
-        // 實際運作的時間表狀態（支持自定義修改並保存）
         let morningSlots = [...morningSlotsDef];
         let eveningSlots = [...eveningSlotsDef];
-
-        // 應用狀態
-        let boardState = {}; // 格式為 { "08:00": { stickers: ["wakeup", "breakfast"], text: "Wake Up" } }
-        let customStickers = {}; 
-        let activeSelectedStickerId = null; 
-        let activeSourceTime = null; // 存放當前選中準備進行對調/轉移的時間槽來源
-        let activeTargetTimeForPopup = null; // 當前正在等待彈窗選擇貼紙的時間槽
+        let boardState = {}; 
+        let activeSourceTime = null; 
+        let activeTargetTimeForPopup = null; 
         let audioEnabled = true;
 
-        // 音效合成器
         let audioCtx = null;
         function playCuteSound(type) {
             if (!audioEnabled) return;
@@ -329,9 +295,7 @@
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                
                 const now = audioCtx.currentTime;
-                
                 if (type === 'select') {
                     let osc = audioCtx.createOscillator();
                     let gain = audioCtx.createGain();
@@ -404,20 +368,15 @@
             showToast("Audio toggled!", "✨");
         }
 
-        // 時間格式化函數（如 0900 -> 09:00, 800 -> 08:00, 9:00 -> 09:00）
         function formatTimeString(rawInput) {
             if (!rawInput) return "";
             let cleaned = rawInput.trim().replace(/\s+/g, '');
-            
-            // 已符合 HH:MM 或 H:MM
             if (/^\d{1,2}:\d{2}$/.test(cleaned)) {
                 let parts = cleaned.split(':');
                 let h = parts[0].padStart(2, '0');
                 let m = parts[1];
                 return `${h}:${m}`;
             }
-            
-            // 處理純數字輸入 (例如 0900, 1430, 800)
             let digits = cleaned.replace(/\D/g, '');
             if (digits.length === 3) {
                 let h = digits.substring(0, 1).padStart(2, '0');
@@ -428,18 +387,48 @@
                 let m = digits.substring(2);
                 return `${h}:${m}`;
             }
-            
             return rawInput; 
         }
 
-        // 初始化加載
+        function updateNextRowTime(currentTime, durationMinutes) {
+            let allSlots = [...morningSlots, ...eveningSlots];
+            let currentIndex = allSlots.indexOf(currentTime);
+            
+            if (currentIndex !== -1 && currentIndex < allSlots.length - 1) {
+                let nextTimeSlot = allSlots[currentIndex + 1];
+                let [h, m] = currentTime.split(':').map(Number);
+                if (!isNaN(h) && !isNaN(m)) {
+                    let totalMins = h * 60 + m + durationMinutes;
+                    let newH = Math.floor(totalMins / 60) % 24;
+                    let newM = totalMins % 60;
+                    let formattedNextTime = `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+                    
+                    if (nextTimeSlot !== formattedNextTime) {
+                        if (morningSlots.includes(nextTimeSlot)) {
+                            let idx = morningSlots.indexOf(nextTimeSlot);
+                            morningSlots[idx] = formattedNextTime;
+                        } else if (eveningSlots.includes(nextTimeSlot)) {
+                            let idx = eveningSlots.indexOf(nextTimeSlot);
+                            eveningSlots[idx] = formattedNextTime;
+                        }
+                        
+                        if (boardState[nextTimeSlot]) {
+                            boardState[formattedNextTime] = { ...boardState[nextTimeSlot] };
+                            delete boardState[nextTimeSlot];
+                        }
+                        
+                        autoSaveSlots();
+                    }
+                }
+            }
+        }
+
         window.onload = function() {
             loadFromStorage();
             renderScheduleSlots();
             setupDragAndDrop();
         };
 
-        // 彈出貼紙選單彈窗
         function openStickerPicker(time) {
             activeTargetTimeForPopup = time;
             document.getElementById('picker-target-time').innerText = time;
@@ -466,40 +455,37 @@
             }, 100);
         }
 
-        // 渲染彈窗內部的貼紙按鈕
         function renderModalStickerOptions() {
             const container = document.getElementById("modal-stickers-container");
             container.innerHTML = "";
             
             stickerGroups.forEach(group => {
-                const groupDiv = document.createElement("div");
-                groupDiv.className = "space-y-3";
-                
-                // 分組標題
-                const title = document.createElement("h4");
-                title.className = "title-font text-lg font-bold text-pink-500 flex items-center gap-2 border-b border-pink-100 pb-1";
-                title.innerHTML = `<i class="fa-solid ${group.icon} text-pink-400"></i> ${group.category}`;
-                groupDiv.appendChild(title);
-                
-                // 貼紙網格
-                const grid = document.createElement("div");
-                grid.className = "grid grid-cols-4 gap-4";
-                
+                const groupWrapper = document.createElement("div");
+                groupWrapper.className = "bg-pink-50/20 p-4 rounded-3xl border border-pink-100/50";
+
+                const groupTitle = document.createElement("h4");
+                groupTitle.className = "title-font text-base font-extrabold text-pink-500 mb-3 flex items-center gap-2 border-b border-pink-100 pb-2";
+                groupTitle.innerHTML = `<i class="fa-solid ${group.icon}"></i> ${group.category}`;
+                groupWrapper.appendChild(groupTitle);
+
+                const gridDiv = document.createElement("div");
+                gridDiv.className = "grid grid-cols-2 sm:grid-cols-4 gap-3";
+
                 group.stickers.forEach(id => {
                     const item = defaultStickers[id];
                     if (!item) return;
 
                     const stickerDiv = document.createElement("div");
-                    stickerDiv.className = "bg-pink-50/40 p-4 rounded-3xl border border-pink-100 shadow-sm cursor-pointer hover:bg-pink-100/60 hover:border-pink-300 hover:-translate-y-1 active:scale-95 transition-all duration-200 flex flex-col items-center select-none text-center";
+                    stickerDiv.className = "bg-white p-3 rounded-2xl border border-pink-100 shadow-sm cursor-pointer hover:bg-pink-100/60 hover:border-pink-300 hover:-translate-y-1 active:scale-95 transition-all duration-200 flex flex-col items-center select-none text-center";
                     
                     const stickerGraphics = `
-                        <div class="relative w-24 h-24 flex items-center justify-center">
-                            <img src="images/${id}.png" 
-                                 alt="Sticker ${id}" 
-                                 class="w-24 h-24 object-contain pointer-events-none relative z-10" 
-                                 onerror="if(!this.dataset.retry){this.dataset.retry=true;this.src=this.src.replace(/\.png$/, '.jpg');}else{this.style.display='none'; this.nextElementSibling.style.display='flex';}"
+                        <div class="relative w-20 h-20 flex items-center justify-center">
+                            <img src="${item.img}" 
+                                 alt="${item.name}" 
+                                 class="w-20 h-20 object-contain pointer-events-none relative z-10" 
+                                 onerror="this.onerror=null; if(!this.src.endsWith('.jpg')){ this.src=this.src.replace('.png','.jpg'); } else { this.style.display='none'; this.nextElementSibling.style.display='flex'; }"
                             />
-                            <div class="hidden absolute inset-0 w-24 h-24 flex flex-col items-center justify-center bg-pink-100 rounded-2xl text-4xl select-none">
+                            <div class="hidden absolute inset-0 w-20 h-20 flex flex-col items-center justify-center bg-pink-100 rounded-2xl text-3xl select-none">
                                 <span>${item.emoji}</span>
                             </div>
                         </div>
@@ -507,7 +493,7 @@
 
                     stickerDiv.innerHTML = `
                         ${stickerGraphics}
-                        <span class="text-xs text-slate-600 font-bold bg-white/80 px-3 py-1 rounded-full mt-3 border border-pink-100/50 shadow-sm">${item.name}</span>
+                        <span class="text-xs text-slate-600 font-bold bg-pink-50 px-2.5 py-1 rounded-full mt-2 border border-pink-100/50">${item.name}</span>
                     `;
 
                     stickerDiv.addEventListener("click", function() {
@@ -517,15 +503,14 @@
                         }
                     });
 
-                    grid.appendChild(stickerDiv);
+                    gridDiv.appendChild(stickerDiv);
                 });
-                
-                groupDiv.appendChild(grid);
-                container.appendChild(groupDiv);
+
+                groupWrapper.appendChild(gridDiv);
+                container.appendChild(groupWrapper);
             });
         }
 
-        // 渲染日程欄位
         function renderScheduleSlots() {
             const morningContainer = document.getElementById("morning-slots");
             const eveningContainer = document.getElementById("evening-slots");
@@ -542,7 +527,6 @@
             });
         }
 
-        // 創建日程單一欄位 HTML 結構
         function createSlotElement(time, column) {
             const div = document.createElement("div");
             div.className = "flex items-center gap-3 transition-all duration-300 group";
@@ -566,16 +550,16 @@
 
                 stickerRenderHtml = `<div class="flex flex-row gap-2 items-center justify-start h-full p-1.5 w-max">`;
                 stickersArray.forEach((stId, idx) => {
-                    const stickerData = defaultStickers[stId];
-                    const imgPath = stickerData ? stickerData.img : `images/${stId}.png`;
-                    const emojiIcon = stickerData ? stickerData.emoji : '✨';
+                    const stObj = defaultStickers[stId];
+                    const imgPath = stObj ? stObj.img : `images/${stId}.png`;
+                    const emojiIcon = stObj ? stObj.emoji : '✨';
 
                     let stickerInner = `
                         <div class="relative ${sizeClass} flex items-center justify-center">
                             <img src="${imgPath}" 
-                                 alt="Sticker ${stId}" 
+                                 alt="${stId}" 
                                  class="${sizeClass} object-contain pointer-events-none relative z-10" 
-                                 onerror="if(!this.dataset.retry){this.dataset.retry=true;this.src=this.src.replace(/\.png$/, '.jpg');}else{this.style.display='none'; this.nextElementSibling.style.display='flex';}"
+                                 onerror="this.onerror=null; if(!this.src.endsWith('.jpg')){ this.src=this.src.replace('.png','.jpg'); } else { this.style.display='none'; this.nextElementSibling.style.display='flex'; }"
                             />
                             <div class="hidden absolute inset-0 ${sizeClass} flex flex-col items-center justify-center bg-pink-100 rounded-lg text-lg select-none">
                                 <span class="text-xs">${emojiIcon}</span>
@@ -600,7 +584,6 @@
             const sourceHighlightClass = isSourceActive ? "active-source-box" : "";
 
             div.innerHTML = `
-                <!-- 時間標題改為可直接打字編輯的 Input 輸入框 -->
                 <div class="w-20 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
                     <input type="text" 
                            value="${time}" 
@@ -611,15 +594,12 @@
                     />
                 </div>
 
-                <!-- 圓角輸入卡片 -->
                 <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm ${sourceHighlightClass}" 
                      id="${safeId}" 
                      data-time="${time}">
                     
-                    <!-- 背景亮麗小星星 -->
                     <div class="absolute inset-0 rounded-2xl star-pattern opacity-30 pointer-events-none"></div>
 
-                    <!-- 放置貼紙的大格子 -->
                     <div class="sticker-spot min-w-[5rem] h-20 flex-shrink-0 rounded-xl bg-pink-50/40 border border-pink-100/30 flex items-center justify-center relative select-none w-auto max-w-[260px] overflow-x-auto cursor-pointer hover:bg-pink-100/40 transition-colors">
                         ${stickerRenderHtml ? stickerRenderHtml : `
                             <div class="text-[10px] font-bold text-pink-300 flex flex-col items-center opacity-60">
@@ -629,7 +609,6 @@
                         `}
                     </div>
 
-                    <!-- 輸入欄位 -->
                     <div class="flex-grow max-w-[240px] relative z-10 flex items-center">
                         <textarea 
                                placeholder="Type plans..." 
@@ -641,7 +620,6 @@
 
                     <div class="flex-grow"></div>
 
-                    <!-- 清除按鈕 -->
                     ${hasItem ? `
                         <button onclick="clearSingleSlot('${time}')" class="relative z-10 text-rose-300 hover:text-rose-500 hover:scale-110 active:scale-95 transition-all text-xs p-1 bg-rose-50 rounded-full w-5 h-5 flex items-center justify-center border border-rose-100 shadow-sm" title="Clear this slot">
                             <i class="fa-solid fa-xmark"></i>
@@ -651,21 +629,18 @@
                 </div>
             `;
 
-            // 點擊貼紙框部分，自動彈出 Picker 貼紙選擇面板
             const spot = div.querySelector('.sticker-spot');
             spot.addEventListener('click', function(e) {
                 e.stopPropagation(); 
                 openStickerPicker(time);
             });
 
-            // 雙擊貼紙欄空白處重置該欄位所有內容
             spot.addEventListener('dblclick', function(e) {
                 if (e.target === spot && boardState[time]) {
                     clearSingleSlot(time);
                 }
             });
 
-            // 點擊事件（用於點對點「日程對調與轉移」機制）
             const writingBox = div.querySelector('.writing-box');
             writingBox.addEventListener('click', function(e) {
                 if (e.target.tagName !== 'INPUT' && 
@@ -697,7 +672,6 @@
             return div;
         }
 
-        // 拖曳核心事件綁定
         function setupDragAndDrop() {
             document.addEventListener("dragover", function(e) {
                 e.preventDefault();
@@ -724,7 +698,6 @@
             });
         }
 
-        // 編輯時間自定義邏輯
         function updateTime(oldTime, newTime, column) {
             let formattedTime = formatTimeString(newTime);
             if (!formattedTime) {
@@ -759,7 +732,6 @@
             showToast(`Time updated to ${formattedTime}! ⏰`, "💖");
         }
 
-        // 點對點魔法轉移/對調核心邏輯
         function transferSlot(fromTime, toTime) {
             if (!boardState[fromTime]) return;
             
@@ -782,45 +754,6 @@
             autoSaveToStorage();
         }
 
-        // 自動更新下一行的時間（僅更新緊隨其後的一行）
-        function updateFollowingRowTime(currentTimeStr, durationMins) {
-            const allSlots = [...morningSlots, ...eveningSlots];
-            const currentIdx = allSlots.indexOf(currentTimeStr);
-            
-            if (currentIdx !== -1 && currentIdx + 1 < allSlots.length) {
-                const nextTimeOld = allSlots[currentIdx + 1];
-                
-                let parts = currentTimeStr.split(':');
-                if (parts.length === 2) {
-                    let h = parseInt(parts[0], 10);
-                    let m = parseInt(parts[1], 10);
-                    if (!isNaN(h) && !isNaN(m)) {
-                        let totalMins = h * 60 + m + durationMins;
-                        let nextH = Math.floor(totalMins / 60) % 24;
-                        let nextM = totalMins % 60;
-                        let nextTimeNew = `${String(nextH).padStart(2, '0')}:${String(nextM).padStart(2, '0')}`;
-                        
-                        if (nextTimeOld !== nextTimeNew) {
-                            const nextIdx = currentIdx + 1;
-                            if (nextIdx < morningSlots.length) {
-                                morningSlots[nextIdx] = nextTimeNew;
-                            } else {
-                                eveningSlots[nextIdx - morningSlots.length] = nextTimeNew;
-                            }
-                            
-                            if (boardState[nextTimeOld]) {
-                                boardState[nextTimeNew] = { ...boardState[nextTimeOld] };
-                                delete boardState[nextTimeOld];
-                            }
-
-                            autoSaveSlots();
-                        }
-                    }
-                }
-            }
-        }
-
-        // 放置貼紙與文字自動配對邏輯，並更新下一行時間
         function placeSticker(time, stickerId) {
             playCuteSound('drop');
             if (!boardState[time]) {
@@ -850,18 +783,14 @@
                 }
             }
 
-            // 更新下一行時間
-            const stickerObj = defaultStickers[stickerId];
-            if (stickerObj && stickerObj.duration) {
-                updateFollowingRowTime(time, stickerObj.duration);
-            }
+            const duration = (defaultStickers[stickerId] && defaultStickers[stickerId].duration) || 60;
+            updateNextRowTime(time, duration);
 
             renderScheduleSlots();
             autoSaveToStorage();
             showToast(`Added sticker to ${time}! ✨`, "🌸");
         }
 
-        // 個別貼紙移除功能
         function removeSpecificSticker(time, index) {
             playCuteSound('clear');
             if (boardState[time] && boardState[time].stickers) {
@@ -875,7 +804,6 @@
             }
         }
 
-        // 修改文字內容
         function updateText(time, val) {
             if (!boardState[time]) {
                 boardState[time] = { stickers: [], text: "" };
@@ -884,7 +812,6 @@
             autoSaveToStorage();
         }
 
-        // 清除單一欄位
         function clearSingleSlot(time) {
             playCuteSound('clear');
             delete boardState[time];
@@ -894,7 +821,6 @@
             showToast(`Slot ${time} cleared!`, "🧹");
         }
 
-        // 重置整個看板
         function clearAllSlots() {
             playCuteSound('clear');
             boardState = {};
@@ -907,13 +833,11 @@
             showToast("Timetable board reset completely!", "🧹");
         }
 
-        // 保存自定義時段
         function autoSaveSlots() {
             localStorage.setItem("magical_morning_slots", JSON.stringify(morningSlots));
             localStorage.setItem("magical_evening_slots", JSON.stringify(eveningSlots));
         }
 
-        // 保存狀態
         function autoSaveToStorage() {
             localStorage.setItem("magical_timetable_state", JSON.stringify(boardState));
         }
@@ -925,7 +849,6 @@
             showToast("Progress saved to your browser! 🦄✨", "💖");
         }
 
-        // 載入進度
         function loadFromStorage() {
             const savedMorning = localStorage.getItem("magical_morning_slots");
             const savedEvening = localStorage.getItem("magical_evening_slots");
@@ -946,7 +869,6 @@
             }
         }
 
-        // 提示彈窗
         function showToast(message, icon = "✨") {
             const toast = document.getElementById("toast");
             const toastMessage = document.getElementById("toast-message");
