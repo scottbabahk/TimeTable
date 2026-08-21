@@ -88,25 +88,12 @@
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        /* 選中貼紙高亮效果 */
-        .active-sticker {
-            border: 3px solid #ff4d88 !important;
-            box-shadow: 0 0 15px rgba(255, 77, 136, 0.6) !important;
-            transform: scale(1.1) rotate(5deg) !important;
-            animation: bounce 0.5s infinite alternate;
-        }
-
         /* 選中時間槽進行對調/轉移的外框高亮與微縮放效果 */
         .active-source-box {
             border: 3px solid #6366f1 !important;
             box-shadow: 0 0 18px rgba(99, 102, 241, 0.65) !important;
             background-color: #f5f3ff !important;
             transform: scale(1.03);
-        }
-
-        @keyframes bounce {
-            from { transform: scale(1.1) rotate(5deg) translateY(0); }
-            to { transform: scale(1.1) rotate(5deg) translateY(-5px); }
         }
     </style>
 </head>
@@ -244,12 +231,12 @@
         const defaultStickers = {
             "wakeup": { name: "Wake Up", emoji: "📚", img: "images/wakeup.png" },
             "breakfast": { name: "Breakfast", emoji: "🪄", img: "images/breakfast.png" },
-            "shower": { name: "Shower", emoji: "🚿", img: "images/shower.png" },
             "lunch": { name: "Lunch", emoji: "🌈", img: "images/lunch.png" },
             "quiettime": { name: "Quiet Time", emoji: "🤫", img: "images/quiettime.png" },
             "tea": { name: "Tea", emoji: "⭐", img: "images/tea.png" },
             "dinner": { name: "Dinner", emoji: "🔮", img: "images/dinner.png" },
             "medicine": { name: "Medicine", emoji: "💊", img: "images/medicine.png" },
+            "shower": { name: "Shower", emoji: "🚿", img: "images/shower.png" },
             "bedtime": { name: "Bedtime", emoji: "🌙", img: "images/bedtime.png" },
             
             "mcs": { name: "MCS", emoji: "🏫", img: "images/mcs.png" },
@@ -270,6 +257,7 @@
             "piano": { name: "Piano", emoji: "🐱", img: "images/piano.png" },
             "choir": { name: "Choir", emoji: "🎤", img: "images/choir.png" },
             "sports": { name: "Sports", emoji: "⚽", img: "images/sports.png" },
+            "watchshow": { name: "Watch Show", emoji: "📺", img: "images/watchshow.png" },
             "others": { name: "Others", emoji: "🌟", img: "images/others.png" }
         };
 
@@ -279,7 +267,7 @@
                 title: "Daily Routines",
                 icon: "fa-sun-cloud",
                 color: "text-amber-500",
-                stickers: ["wakeup", "breakfast", "shower", "lunch", "quiettime", "tea", "dinner", "medicine", "bedtime"]
+                stickers: ["wakeup", "breakfast", "lunch", "quiettime", "tea", "dinner", "medicine", "shower", "bedtime"]
             },
             {
                 title: "Study",
@@ -291,7 +279,7 @@
                 title: "Hobbies / Others",
                 icon: "fa-icons",
                 color: "text-purple-500",
-                stickers: ["transportation", "lego", "drawing", "shopping", "playtime", "piano", "choir", "sports", "others"]
+                stickers: ["transportation", "lego", "drawing", "shopping", "playtime", "piano", "choir", "sports", "watchshow", "others"]
             }
         ];
 
@@ -308,7 +296,6 @@
         let eveningSlots = [...eveningSlotsDef];
 
         let boardState = {}; 
-        let customStickers = {}; 
         let activeSourceTime = null; 
         let activeTargetTimeForPopup = null; 
         let audioEnabled = true;
@@ -396,7 +383,7 @@
             showToast("Audio toggled!", "✨");
         }
 
-        // 時間格式化函數（如 0900 -> 09:00, 800 -> 08:00, 9:00 -> 09:00）
+        // 時間格式化函數
         function formatTimeString(rawInput) {
             if (!rawInput) return "";
             let cleaned = rawInput.trim().replace(/\s+/g, '');
