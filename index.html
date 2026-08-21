@@ -53,12 +53,15 @@
             background-size: 30px 30px;
         }
 
-        /* 拖曳懸停效果 */
-        .drag-hover {
-            background-color: #fff0f5 !important;
-            border: 2px dashed #ff94b1 !important;
-            transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(255, 148, 177, 0.3);
+        /* 行拖曳懸停效果 */
+        .row-drag-over {
+            border-top: 4px solid #6366f1 !important;
+            transform: translateY(-2px);
+        }
+
+        .row-dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
         }
 
         /* 自定義可愛滾動條 */
@@ -88,12 +91,11 @@
             100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        /* 選中時間槽進行對調/轉移的外框高亮與微縮放效果 */
-        .active-source-box {
-            border: 3px solid #6366f1 !important;
-            box-shadow: 0 0 18px rgba(99, 102, 241, 0.65) !important;
-            background-color: #f5f3ff !important;
-            transform: scale(1.03);
+        .drag-handle {
+            cursor: grab;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
         }
     </style>
 </head>
@@ -219,6 +221,39 @@
         </div>
     </div>
 
+    <!-- 行長按選單 Modal (Row Options Modal) -->
+    <div id="row-menu-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-3 hidden backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative magical-border transform transition-all scale-95 duration-200 text-center">
+            <button onclick="closeRowMenu()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl transition-all hover:scale-110">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+            
+            <h3 class="title-font text-2xl font-bold text-indigo-500 mb-2 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-clock"></i> 時間欄位選項
+            </h3>
+            <p class="text-sm text-slate-500 mb-4">已選擇時間：<span id="menu-target-time" class="font-extrabold text-pink-500 text-lg"></span></p>
+
+            <div class="space-y-3">
+                <div class="flex items-center gap-2 justify-center bg-pink-50 p-3 rounded-2xl border border-pink-100">
+                    <label class="text-sm font-bold text-slate-600">新時間：</label>
+                    <input type="text" id="new-slot-time-input" placeholder="00:00" class="w-24 px-3 py-1 bg-white border border-pink-200 rounded-xl text-center font-extrabold text-indigo-600 outline-none focus:ring-2 focus:ring-pink-300" />
+                </div>
+
+                <button onclick="executeInsertRow('after')" class="w-full py-2.5 px-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> 在此時間【之後】插入新行
+                </button>
+
+                <button onclick="executeInsertRow('before')" class="w-full py-2.5 px-4 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-up"></i> 在此時間【之前】插入新行
+                </button>
+
+                <button onclick="executeDeleteRow()" class="w-full py-2.5 px-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-trash-can"></i> 刪除此時間行
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 提示框系統 -->
     <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 bg-slate-800 text-white rounded-2xl shadow-xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 font-medium text-sm">
         <span id="toast-icon">✨</span>
@@ -231,12 +266,12 @@
         const defaultStickers = {
             "wakeup": { name: "Wake Up", emoji: "📚", img: "images/wakeup.png" },
             "breakfast": { name: "Breakfast", emoji: "🪄", img: "images/breakfast.png" },
+            "shower": { name: "Shower", emoji: "🚿", img: "images/shower.png" },
             "lunch": { name: "Lunch", emoji: "🌈", img: "images/lunch.png" },
+            "dinner": { name: "Dinner", emoji: "🔮", img: "images/dinner.png" },
             "quiettime": { name: "Quiet Time", emoji: "🤫", img: "images/quiettime.png" },
             "tea": { name: "Tea", emoji: "⭐", img: "images/tea.png" },
-            "dinner": { name: "Dinner", emoji: "🔮", img: "images/dinner.png" },
             "medicine": { name: "Medicine", emoji: "💊", img: "images/medicine.png" },
-            "shower": { name: "Shower", emoji: "🚿", img: "images/shower.png" },
             "bedtime": { name: "Bedtime", emoji: "🌙", img: "images/bedtime.png" },
             
             "mcs": { name: "MCS", emoji: "🏫", img: "images/mcs.png" },
@@ -267,7 +302,7 @@
                 title: "Daily Routines",
                 icon: "fa-sun-cloud",
                 color: "text-amber-500",
-                stickers: ["wakeup", "breakfast", "lunch", "dinner", "tea", "quiettime", "medicine", "shower", "bedtime"]
+                stickers: ["wakeup", "breakfast", "shower", "lunch", "dinner", "quiettime", "tea", "medicine", "bedtime"]
             },
             {
                 title: "Lesson",
@@ -296,9 +331,17 @@
         let eveningSlots = [...eveningSlotsDef];
 
         let boardState = {}; 
-        let activeSourceTime = null; 
         let activeTargetTimeForPopup = null; 
         let audioEnabled = true;
+
+        // 長按選單相關變數
+        let longPressTimer = null;
+        let isLongPressTriggered = false;
+        let selectedMenuTime = null;
+        let selectedMenuColumn = null;
+
+        // 拖曳 reorder 相關變數
+        let draggedRowInfo = null;
 
         // 音效合成器
         let audioCtx = null;
@@ -516,11 +559,13 @@
             });
         }
 
-        // 創建日程單一欄位 HTML 結構
+        // 創建日程單一欄位 HTML 結構 (支援行長按選單與拖拽排序)
         function createSlotElement(time, column) {
             const div = document.createElement("div");
-            div.className = "flex items-center gap-3 transition-all duration-300 group";
+            div.className = "flex items-center gap-3 transition-all duration-300 group slot-row rounded-2xl p-1 hover:bg-white/40";
             div.setAttribute("data-time", time);
+            div.setAttribute("data-column", column);
+            div.setAttribute("draggable", "true"); // 允許整體整列拖拽 reorder
 
             const hasItem = boardState[time];
             const textVal = hasItem ? hasItem.text : "";
@@ -570,23 +615,26 @@
             }
 
             const safeId = `box-${time.replace(':', '-')}`;
-            const isSourceActive = (activeSourceTime === time);
-            const sourceHighlightClass = isSourceActive ? "active-source-box" : "";
 
             div.innerHTML = `
-                <!-- 時間標題改為可直接打字編輯的 Input 輸入框 -->
-                <div class="w-20 flex-shrink-0 flex items-center justify-center py-2 hover:scale-110 transition-transform duration-200">
+                <!-- 拖拽把手圖示 -->
+                <div class="drag-handle text-slate-300 hover:text-indigo-400 transition-colors px-1" title="Hold & drag to reorder">
+                    <i class="fa-solid fa-grip-vertical text-lg"></i>
+                </div>
+
+                <!-- 時間標題按鈕（支援點擊編輯與長按選單） -->
+                <div class="w-20 flex-shrink-0 flex items-center justify-center py-2 hover:scale-105 transition-transform duration-200 time-badge select-none cursor-pointer">
                     <input type="text" 
                            value="${time}" 
                            placeholder="00:00"
-                           class="title-font text-2xl font-extrabold text-pink-500 tracking-wider bg-transparent border-none outline-none w-20 text-center focus:bg-pink-50 rounded-lg"
+                           class="title-font text-2xl font-extrabold text-pink-500 tracking-wider bg-transparent border-none outline-none w-20 text-center focus:bg-pink-50 rounded-lg cursor-pointer"
                            onchange="updateTime('${time}', this.value, '${column}')"
                            onkeydown="if(event.key==='Enter'){ this.blur(); }"
                     />
                 </div>
 
                 <!-- 圓角輸入卡片 -->
-                <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm ${sourceHighlightClass}" 
+                <div class="writing-box flex-grow min-h-[88px] bg-white/70 rounded-2xl border-2 border-dashed border-[#ffd1dc] px-3 py-2 flex items-center gap-3 transition-all duration-300 relative hover:border-pink-300 hover:bg-white/95 group-hover:shadow-sm" 
                      id="${safeId}" 
                      data-time="${time}">
                     
@@ -625,6 +673,41 @@
                 </div>
             `;
 
+            // 綁定時間按鈕的「長按 (Long Press)」觸發菜單邏輯
+            const timeBadge = div.querySelector('.time-badge');
+            const timeInput = div.querySelector('input');
+
+            const startPress = () => {
+                isLongPressTriggered = false;
+                longPressTimer = setTimeout(() => {
+                    isLongPressTriggered = true;
+                    timeInput.blur();
+                    openRowMenu(time, column);
+                }, 500); // 500ms 即判定為長按
+            };
+
+            const cancelPress = () => {
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            };
+
+            timeBadge.addEventListener('mousedown', startPress);
+            timeBadge.addEventListener('touchstart', startPress, { passive: true });
+            timeBadge.addEventListener('mouseup', cancelPress);
+            timeBadge.addEventListener('mouseleave', cancelPress);
+            timeBadge.addEventListener('touchend', cancelPress);
+            timeBadge.addEventListener('touchmove', cancelPress);
+
+            // 如果長按觸發，阻止 input focus 避免彈出手機鍵盤
+            timeInput.addEventListener('click', (e) => {
+                if (isLongPressTriggered) {
+                    e.preventDefault();
+                    timeInput.blur();
+                }
+            });
+
             // 點擊貼紙框部分，自動彈出 Picker 貼紙選擇面板
             const spot = div.querySelector('.sticker-spot');
             spot.addEventListener('click', function(e) {
@@ -639,31 +722,42 @@
                 }
             });
 
-            // 點擊事件（用於點對點「日程對調與轉移」機制）
-            const writingBox = div.querySelector('.writing-box');
-            writingBox.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT' && 
-                    e.target.tagName !== 'TEXTAREA' && 
-                    e.target.tagName !== 'BUTTON' && 
-                    !e.target.closest('button') &&
-                    !e.target.closest('.sticker-spot')) {
+            // 行整列拖拽 reorder 事件綁定
+            div.addEventListener('dragstart', function(e) {
+                draggedRowInfo = { time, column };
+                div.classList.add('row-dragging');
+                e.dataTransfer.setData('application/x-row-drag', JSON.stringify({ time, column }));
+            });
+
+            div.addEventListener('dragend', function() {
+                div.classList.remove('row-dragging');
+                draggedRowInfo = null;
+                document.querySelectorAll('.slot-row').forEach(r => r.classList.remove('row-drag-over'));
+            });
+
+            div.addEventListener('dragover', function(e) {
+                if (draggedRowInfo) {
+                    e.preventDefault();
+                    div.classList.add('row-drag-over');
+                }
+            });
+
+            div.addEventListener('dragleave', function() {
+                div.classList.remove('row-drag-over');
+            });
+
+            div.addEventListener('drop', function(e) {
+                if (draggedRowInfo) {
+                    e.preventDefault();
+                    div.classList.remove('row-drag-over');
                     
-                    if (activeSourceTime) {
-                        if (activeSourceTime === time) {
-                            activeSourceTime = null;
-                            renderScheduleSlots();
-                            showToast("Selection cancelled", "✨");
-                        } else {
-                            transferSlot(activeSourceTime, time);
-                        }
-                    } 
-                    else {
-                        if (boardState[time] && ((boardState[time].stickers && boardState[time].stickers.length > 0) || boardState[time].text)) {
-                            activeSourceTime = time;
-                            playCuteSound('select');
-                            renderScheduleSlots(); 
-                            showToast(`Picked up ${time}. Tap another slot to transfer! 🔄`, "⭐");
-                        }
+                    const sourceTime = draggedRowInfo.time;
+                    const sourceCol = draggedRowInfo.column;
+                    const targetTime = time;
+                    const targetCol = column;
+
+                    if (sourceTime !== targetTime) {
+                        reorderSlots(sourceTime, sourceCol, targetTime, targetCol);
                     }
                 }
             });
@@ -671,24 +765,121 @@
             return div;
         }
 
-        // 拖曳核心事件綁定
+        // 行拖拽重新排序邏輯
+        function reorderSlots(sourceTime, sourceCol, targetTime, targetCol) {
+            let srcList = sourceCol === 'morning' ? morningSlots : eveningSlots;
+            let tgtList = targetCol === 'morning' ? morningSlots : eveningSlots;
+
+            const srcIdx = srcList.indexOf(sourceTime);
+            if (srcIdx === -1) return;
+
+            // 移除源頭
+            srcList.splice(srcIdx, 1);
+
+            // 計算目標位置
+            const tgtIdx = tgtList.indexOf(targetTime);
+            if (tgtIdx !== -1) {
+                tgtList.splice(tgtIdx, 0, sourceTime);
+            } else {
+                tgtList.push(sourceTime);
+            }
+
+            playCuteSound('drop');
+            autoSaveSlots();
+            renderScheduleSlots();
+            showToast("Row order updated! 🔄", "✨");
+        }
+
+        // 打開行長按選項選單
+        function openRowMenu(time, column) {
+            playCuteSound('select');
+            selectedMenuTime = time;
+            selectedMenuColumn = column;
+
+            document.getElementById('menu-target-time').innerText = time;
+            
+            // 計算一個預設推算的預設新時間（加 30 分鐘）
+            let defaultNewTime = "00:00";
+            if (/^\d{2}:\d{2}$/.test(time)) {
+                let [h, m] = time.split(':').map(Number);
+                let totalMins = h * 60 + m + 30;
+                let newH = Math.floor(totalMins / 60) % 24;
+                let newM = totalMins % 60;
+                defaultNewTime = `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+            }
+            document.getElementById('new-slot-time-input').value = defaultNewTime;
+
+            const modal = document.getElementById('row-menu-modal');
+            modal.classList.remove('hidden');
+            const modalBox = modal.querySelector('.magical-border');
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+        }
+
+        function closeRowMenu() {
+            const modal = document.getElementById('row-menu-modal');
+            const modalBox = modal.querySelector('.magical-border');
+            modalBox.classList.remove('scale-100');
+            modalBox.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                selectedMenuTime = null;
+                selectedMenuColumn = null;
+            }, 100);
+        }
+
+        // 執行插入新行
+        function executeInsertRow(position) {
+            if (!selectedMenuTime || !selectedMenuColumn) return;
+
+            const rawInput = document.getElementById('new-slot-time-input').value;
+            const formattedTime = formatTimeString(rawInput) || "00:00";
+
+            let targetList = selectedMenuColumn === 'morning' ? morningSlots : eveningSlots;
+            const index = targetList.indexOf(selectedMenuTime);
+
+            if (index !== -1) {
+                const insertIndex = position === 'after' ? index + 1 : index;
+                targetList.splice(insertIndex, 0, formattedTime);
+                
+                playCuteSound('drop');
+                autoSaveSlots();
+                renderScheduleSlots();
+                closeRowMenu();
+                showToast(`Inserted new slot at ${formattedTime}! ✨`, "🌸");
+            }
+        }
+
+        // 執行刪除此行
+        function executeDeleteRow() {
+            if (!selectedMenuTime || !selectedMenuColumn) return;
+
+            let targetList = selectedMenuColumn === 'morning' ? morningSlots : eveningSlots;
+            const index = targetList.indexOf(selectedMenuTime);
+
+            if (index !== -1) {
+                targetList.splice(index, 1);
+                delete boardState[selectedMenuTime];
+
+                playCuteSound('clear');
+                autoSaveSlots();
+                autoSaveToStorage();
+                renderScheduleSlots();
+                closeRowMenu();
+                showToast(`Deleted row ${selectedMenuTime}! 🧹`, "✨");
+            }
+        }
+
+        // 拖曳貼紙事件綁定
         function setupDragAndDrop() {
             document.addEventListener("dragover", function(e) {
                 e.preventDefault();
             });
-            document.addEventListener("dragenter", function(e) {
-                const dropBox = e.target.closest(".writing-box");
-                if (dropBox) dropBox.classList.add("drag-hover");
-            });
-            document.addEventListener("dragleave", function(e) {
-                const dropBox = e.target.closest(".writing-box");
-                if (dropBox) dropBox.classList.remove("drag-hover");
-            });
             document.addEventListener("drop", function(e) {
-                e.preventDefault();
+                // 若為貼紙放落
                 const dropBox = e.target.closest(".writing-box");
-                if (dropBox) {
-                    dropBox.classList.remove("drag-hover");
+                if (dropBox && e.dataTransfer.types.includes("text/plain")) {
+                    e.preventDefault();
                     const time = dropBox.getAttribute("data-time");
                     const stickerId = e.dataTransfer.getData("text/plain");
                     if (stickerId && defaultStickers[stickerId]) {
@@ -723,37 +914,10 @@
                 delete boardState[oldTime];
             }
 
-            if (activeSourceTime === oldTime) {
-                activeSourceTime = formattedTime;
-            }
-
             autoSaveSlots();
             autoSaveToStorage();
             renderScheduleSlots();
             showToast(`Time updated to ${formattedTime}! ⏰`, "💖");
-        }
-
-        // 點對點魔法轉移/對調核心邏輯
-        function transferSlot(fromTime, toTime) {
-            if (!boardState[fromTime]) return;
-            
-            playCuteSound('drop');
-            const sourceData = { ...boardState[fromTime] };
-            
-            if (boardState[toTime]) {
-                const targetData = { ...boardState[toTime] };
-                boardState[toTime] = sourceData;
-                boardState[fromTime] = targetData;
-                showToast(`Plans swapped between ${fromTime} and ${toTime}! 🔄`, "✨");
-            } else {
-                boardState[toTime] = sourceData;
-                delete boardState[fromTime];
-                showToast(`Plans moved from ${fromTime} to ${toTime}! 🔄`, "✨");
-            }
-            
-            activeSourceTime = null; 
-            renderScheduleSlots();
-            autoSaveToStorage();
         }
 
         // 放置貼紙與文字自動配對邏輯
@@ -818,7 +982,6 @@
         function clearSingleSlot(time) {
             playCuteSound('clear');
             delete boardState[time];
-            if (activeSourceTime === time) activeSourceTime = null;
             renderScheduleSlots();
             autoSaveToStorage();
             showToast(`Slot ${time} cleared!`, "🧹");
@@ -828,7 +991,6 @@
         function clearAllSlots() {
             playCuteSound('clear');
             boardState = {};
-            activeSourceTime = null;
             morningSlots = [...morningSlotsDef];
             eveningSlots = [...eveningSlotsDef];
             autoSaveSlots();
