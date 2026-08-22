@@ -938,7 +938,8 @@
 
             boardState[time].stickers.push(stickerId);
 
-            if (stickerTextMap[stickerId]) {
+            // 如果選取的貼紙不是 'others'，才自動加入對應文字
+            if (stickerId !== 'others' && stickerTextMap[stickerId]) {
                 const mapText = stickerTextMap[stickerId];
                 if (!boardState[time].text.trim()) {
                     boardState[time].text = mapText;
